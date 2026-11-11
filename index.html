@@ -197,14 +197,12 @@
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL -->
+    <!-- CONTEÚDO PRINCIPAL (LAYOUT REORGANIZADO PARA MOBILE E DESKTOP) -->
     <main class="max-w-7xl mx-auto w-full my-4 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
 
-        <!-- PAINEL ESQUERDO: CONTROLES E MISSÕES -->
-        <section class="lg:col-span-5 flex flex-col gap-5">
-            
-            <!-- SELETOR DE MISSÕES -->
-            <div id="mission-selector-card" class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
+        <!-- 1. SELETOR DE MISSÕES (Ordem 1 no mobile / Coluna Esquerda Topo no desktop) -->
+        <section id="mission-selector-card" class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md order-1 lg:order-1 lg:col-span-5 flex flex-col gap-5">
+            <div>
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-xs font-orbitron tracking-widest text-space-cyan uppercase">Progresso de Missão (Máx 5)</span>
                     <div class="flex items-center gap-2">
@@ -214,9 +212,7 @@
                 </div>
 
                 <!-- PROGRESSO DAS 5 MISSÕES -->
-                <div class="grid grid-cols-5 gap-1.5 mb-3" id="mission-steps-indicator">
-                    <!-- Indicadores gerados via JS -->
-                </div>
+                <div class="grid grid-cols-5 gap-1.5 mb-3" id="mission-steps-indicator"></div>
 
                 <div class="flex items-center justify-between gap-2 mb-2">
                     <span id="mission-title-badge" class="font-orbitron font-bold text-sm text-space-cyan">Missão 1 / 5</span>
@@ -225,121 +221,117 @@
 
                 <div id="mission-description-box" class="bg-slate-950/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
             </div>
+        </section>
 
-            <!-- PAINEL DE COMANDOS (VETORES E MATRIZES) -->
-            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex-grow flex flex-col justify-between">
-                <div>
-                    <div class="flex justify-between items-center mb-3">
-                        <h2 class="font-orbitron font-bold text-sm text-slate-200 tracking-wide">
-                            <i class="fa-solid fa-gamepad text-space-purple mr-2"></i>PROPULSÃO MATRICIAL
-                        </h2>
-                        <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Vetores & Matrizes</span>
-                    </div>
+        <!-- 2. MAPA CARTESIANO / PAINEL DA NAVE (Ordem 2 no mobile / Coluna Direita Topo no desktop) -->
+        <section class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md order-2 lg:order-3 lg:col-span-7 flex flex-col items-center">
+            <div class="w-full flex justify-between items-center mb-3">
+                <span class="text-xs font-orbitron text-space-cyan tracking-wider flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-space-cyan animate-pulse"></span> PLANO CARTESIANO (X, Y)
+                </span>
+                <div class="flex items-center gap-3 font-mono text-xs">
+                    <span class="text-space-cyan">Nave: <b id="ship-coords">(0, 0)</b></span>
+                    <span class="text-space-gold">Alvo: <b id="target-coords">(5, 5)</b></span>
+                </div>
+            </div>
 
-                    <!-- Botões de Translação (Soma de Vetores) -->
-                    <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">1. Deslocamento (Soma de Vetor $v + u$):</div>
-                    <div class="grid grid-cols-4 gap-2 mb-3">
-                        <button onclick="applyTranslation(-1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-left mb-1"></i>
-                            <span class="text-[10px] font-mono">[-1, 0]</span>
-                        </button>
-                        <button onclick="applyTranslation(1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-right mb-1"></i>
-                            <span class="text-[10px] font-mono">[+1, 0]</span>
-                        </button>
-                        <button onclick="applyTranslation(0, 1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-up mb-1"></i>
-                            <span class="text-[10px] font-mono">[0, +1]</span>
-                        </button>
-                        <button onclick="applyTranslation(0, -1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-down mb-1"></i>
-                            <span class="text-[10px] font-mono">[0, -1]</span>
-                        </button>
-                    </div>
+            <!-- Canvas do Mapa -->
+            <div class="relative bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden shadow-inner flex justify-center items-center">
+                <canvas id="cartesian-canvas" width="400" height="400" class="rounded-lg bg-slate-950"></canvas>
+            </div>
 
-                    <!-- Botões de Rotação e Escala (Matrizes 2x2) -->
-                    <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">2. Transformação Linear (Matriz · $v$):</div>
-                    <div class="grid grid-cols-3 gap-2 mb-4">
-                        <button onclick="applyRotation()" class="control-btn bg-slate-950 hover:bg-slate-900 border border-purple-500/40 text-space-purple rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-rotate-right mb-1"></i>
-                            <span class="text-[10px] font-mono font-bold">Girar 90°</span>
-                        </button>
-                        <button onclick="applyScale(2)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-emerald-500/40 text-space-green rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-expand mb-1"></i>
-                            <span class="text-[10px] font-mono font-bold">Dobrar (2x)</span>
-                        </button>
-                        <button onclick="applyScale(0.5)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-amber-500/40 text-space-gold rounded-xl p-2.5 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-compress mb-1"></i>
-                            <span class="text-[10px] font-mono font-bold">Metade (0.5x)</span>
-                        </button>
-                    </div>
+            <!-- Status de Pouso -->
+            <div id="mission-status-banner" class="w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i> FORA DA BASE-ALVO
+            </div>
+        </section>
 
-                    <!-- Botões de Controle -->
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="undoMove()" class="bg-slate-950 hover:bg-slate-900 text-amber-400 border border-amber-500/30 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
-                            <i class="fa-solid fa-rotate-left"></i> Desfazer
-                        </button>
-                        <button onclick="resetShip()" class="bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-800 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
-                            <i class="fa-solid fa-power-off"></i> Reiniciar
-                        </button>
-                    </div>
+        <!-- 3. BASE DE MOVIMENTAÇÃO / PROPULSÃO MATRICIAL (Ordem 3 no mobile, logo abaixo do painel da nave / Coluna Esquerda Base no desktop) -->
+        <section class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md order-3 lg:order-2 lg:col-span-5 flex flex-col justify-between">
+            <div>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="font-orbitron font-bold text-sm text-slate-200 tracking-wide">
+                        <i class="fa-solid fa-gamepad text-space-purple mr-2"></i>PROPULSÃO MATRICIAL
+                    </h2>
+                    <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Vetores & Matrizes</span>
                 </div>
 
-                <!-- Histórico de Movimentos -->
-                <div class="mt-4 pt-3 border-t border-slate-800">
-                    <span class="text-[11px] text-slate-400 font-orbitron block mb-1.5">Sequência de Comandos:</span>
-                    <div id="history-sequence" class="flex flex-wrap gap-1.5 min-h-[30px] items-center bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs font-mono">
-                        <span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>
-                    </div>
+                <!-- Botões de Translação (Soma de Vetores) -->
+                <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">1. Deslocamento (Soma de Vetor $v + u$):</div>
+                <div class="grid grid-cols-4 gap-2 mb-3">
+                    <button onclick="applyTranslation(-1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-arrow-left mb-1"></i>
+                        <span class="text-[10px] font-mono">[-1, 0]</span>
+                    </button>
+                    <button onclick="applyTranslation(1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-arrow-right mb-1"></i>
+                        <span class="text-[10px] font-mono">[+1, 0]</span>
+                    </button>
+                    <button onclick="applyTranslation(0, 1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-arrow-up mb-1"></i>
+                        <span class="text-[10px] font-mono">[0, +1]</span>
+                    </button>
+                    <button onclick="applyTranslation(0, -1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-arrow-down mb-1"></i>
+                        <span class="text-[10px] font-mono">[0, -1]</span>
+                    </button>
+                </div>
+
+                <!-- Botões de Rotação e Escala (Matrizes 2x2) -->
+                <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">2. Transformação Linear (Matriz · $v$):</div>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <button onclick="applyRotation()" class="control-btn bg-slate-950 hover:bg-slate-900 border border-purple-500/40 text-space-purple rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-rotate-right mb-1"></i>
+                        <span class="text-[10px] font-mono font-bold">Girar 90°</span>
+                    </button>
+                    <button onclick="applyScale(2)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-emerald-500/40 text-space-green rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-expand mb-1"></i>
+                        <span class="text-[10px] font-mono font-bold">Dobrar (2x)</span>
+                    </button>
+                    <button onclick="applyScale(0.5)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-amber-500/40 text-space-gold rounded-xl p-2.5 flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-compress mb-1"></i>
+                        <span class="text-[10px] font-mono font-bold">Metade (0.5x)</span>
+                    </button>
+                </div>
+
+                <!-- Botões de Controle -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="undoMove()" class="bg-slate-950 hover:bg-slate-900 text-amber-400 border border-amber-500/30 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-rotate-left"></i> Desfazer
+                    </button>
+                    <button onclick="resetShip()" class="bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-800 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-power-off"></i> Reiniciar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Histórico de Movimentos -->
+            <div class="mt-4 pt-3 border-t border-slate-800">
+                <span class="text-[11px] text-slate-400 font-orbitron block mb-1.5">Sequência de Comandos:</span>
+                <div id="history-sequence" class="flex flex-wrap gap-1.5 min-h-[30px] items-center bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs font-mono">
+                    <span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>
                 </div>
             </div>
         </section>
 
-        <!-- PAINEL DIREITO: MAPA CARTESIANO (CANVAS) E MATEMÁTICA -->
-        <section class="lg:col-span-7 flex flex-col gap-5">
-            
-            <!-- MAPA CARTESIANO (VISUALIZAÇÃO DA NAVE) -->
-            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col items-center">
-                <div class="w-full flex justify-between items-center mb-3">
-                    <span class="text-xs font-orbitron text-space-cyan tracking-wider flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-space-cyan animate-pulse"></span> PLANO CARTESIANO (X, Y)
-                    </span>
-                    <div class="flex items-center gap-3 font-mono text-xs">
-                        <span class="text-space-cyan">Nave: <b id="ship-coords">(0, 0)</b></span>
-                        <span class="text-space-gold">Alvo: <b id="target-coords">(5, 5)</b></span>
-                    </div>
-                </div>
-
-                <!-- Canvas do Mapa -->
-                <div class="relative bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden shadow-inner flex justify-center items-center">
-                    <canvas id="cartesian-canvas" width="400" height="400" class="rounded-lg bg-slate-950"></canvas>
-                </div>
-
-                <!-- Status de Pouso -->
-                <div id="mission-status-banner" class="w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i> FORA DA BASE-ALVO
-                </div>
+        <!-- 4. DEMONSTRAÇÃO MATEMÁTICA (Ordem 4 no mobile / Coluna Direita Base no desktop) -->
+        <section class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md order-4 lg:order-4 lg:col-span-7 flex flex-col justify-center">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="font-orbitron font-bold text-xs text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-square-root-variable text-space-cyan"></i> Expressão Algébrica Atual
+                </h3>
+                <span class="text-[10px] font-mono text-space-cyan bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">Cálculo Vetorial</span>
             </div>
 
-            <!-- DEMONSTRAÇÃO MATEMÁTICA -->
-            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex-grow">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="font-orbitron font-bold text-xs text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                        <i class="fa-solid fa-square-root-variable text-space-cyan"></i> Expressão Algébrica Atual
-                    </h3>
-                    <span class="text-[10px] font-mono text-space-cyan bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">Cálculo Vetorial</span>
-                </div>
-
-                <div class="bg-slate-950 rounded-xl p-3.5 border border-slate-800 text-center font-mono text-xs sm:text-sm text-slate-300">
-                    <span id="math-equation" class="text-space-purple font-bold">Posição Inicial: P = (0, 0)</span>
-                </div>
-
-                <div id="math-explanation" class="mt-2.5 text-xs text-slate-400 leading-relaxed text-center">
-                    Use os botões de propulsão para mover a nave pelo plano cartesiano e alcançar o planeta alvo.
-                </div>
+            <div class="bg-slate-950 rounded-xl p-3.5 border border-slate-800 text-center font-mono text-xs sm:text-sm text-slate-300">
+                <span id="math-equation" class="text-space-purple font-bold">Posição Inicial: P = (0, 0)</span>
             </div>
 
+            <div id="math-explanation" class="mt-2.5 text-xs text-slate-400 leading-relaxed text-center">
+                Use os botões de propulsão para mover a nave pelo plano cartesiano e alcançar o planeta alvo.
+            </div>
         </section>
+
     </main>
 
     <!-- RODAPÉ -->
@@ -803,175 +795,4 @@
             loadMission(currentMissionNum);
         }
 
-        function updateUI() {
-            document.getElementById('ship-coords').innerText = `(${shipPos[0]}, ${shipPos[1]})`;
-            document.getElementById('target-coords').innerText = `(${targetPos[0]}, ${targetPos[1]})`;
-            document.getElementById('move-counter').innerText = `Passos: ${movesCount}`;
-            renderHistory();
-            drawCartesianGrid();
-        }
-
-        function renderHistory() {
-            const container = document.getElementById('history-sequence');
-            if (commandHistory.length === 0) {
-                container.innerHTML = `<span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>`;
-                return;
-            }
-            container.innerHTML = commandHistory.map((c, i) => `
-                <span class="px-2 py-0.5 rounded border text-[11px] font-bold text-space-cyan border-cyan-800 bg-cyan-950/60">${c}</span>${i < commandHistory.length - 1 ? '<span class="text-slate-600">→</span>' : ''}
-            `).join('');
-        }
-
-        function checkVictory() {
-            const statusBanner = document.getElementById('mission-status-banner');
-
-            if (shipPos[0] === targetPos[0] && shipPos[1] === targetPos[1]) {
-                playSound('success');
-                triggerConfetti();
-
-                totalSessionMoves += movesCount;
-
-                sessionFullReport.push({
-                    missionNum: currentMissionNum,
-                    missionName: currentMission.name,
-                    startPos: [...currentMission.start],
-                    targetPos: [...currentMission.target],
-                    moves: movesCount,
-                    logs: [...mathLogHistory]
-                });
-
-                statusBanner.className = "w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-emerald-950/90 text-space-green border border-emerald-500 flex items-center justify-center gap-2 neon-glow-green";
-                statusBanner.innerHTML = `<i class="fa-solid fa-flag-checkered"></i> POUSO CONFIRMADO NO ALVO!`;
-
-                setTimeout(() => showVictoryModal(), 400);
-            } else {
-                statusBanner.className = "w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2";
-                statusBanner.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> FORA DA BASE-ALVO`;
-            }
-        }
-
-        function showVictoryModal() {
-            const modal = document.getElementById('victory-modal');
-            const isLastMission = currentMissionNum >= TOTAL_MAX_MISSIONS;
-
-            if (isLastMission) {
-                document.getElementById('modal-victory-title').innerText = "JOGO CONCLUÍDO COM SUCESSO!";
-                document.getElementById('modal-victory-subtitle').innerText = `Você completou todas as ${TOTAL_MAX_MISSIONS} missões em nível HARD!`;
-                document.getElementById('btn-next-step').innerText = "REINICIAR TODAS AS MISSÕES";
-                document.getElementById('btn-download-pdf-modal').classList.remove('hidden');
-
-                if (currentUser) saveToLeaderboard(currentUser.name, totalSessionMoves);
-            } else {
-                document.getElementById('modal-victory-title').innerText = "POUSO REALIZADO COM SUCESSO!";
-                document.getElementById('modal-victory-subtitle').innerText = "Coordenadas calculadas e alcançadas perfeitamente.";
-                document.getElementById('btn-next-step').innerText = `PRÓXIMA MISSÃO (${currentMissionNum + 1}/${TOTAL_MAX_MISSIONS})`;
-                document.getElementById('btn-download-pdf-modal').classList.add('hidden');
-            }
-
-            document.getElementById('modal-mission-name').innerText = `${currentMission.title}: ${currentMission.name}`;
-            document.getElementById('modal-moves-count').innerText = movesCount;
-            document.getElementById('modal-total-moves').innerText = `${totalSessionMoves} passos totais`;
-
-            const mathLogContainer = document.getElementById('modal-math-log');
-            let mathHTML = `<div class="p-2 rounded bg-slate-900 border border-slate-800 text-slate-400"><strong class="text-space-cyan">Origem:</strong> P₀ = (${currentMission.start[0]}, ${currentMission.start[1]})</div>`;
-            
-            mathLogHistory.forEach((item, idx) => {
-                mathHTML += `
-                    <div class="p-2 rounded bg-slate-900 border border-slate-800 flex flex-col gap-0.5">
-                        <span class="text-[10px] text-space-purple font-semibold">Passo ${idx + 1} - ${item.type}</span>
-                        <span class="text-slate-200 font-bold">${item.eq}</span>
-                    </div>
-                `;
-            });
-
-            mathHTML += `<div class="p-2 rounded bg-emerald-950/80 border border-emerald-800/80 text-space-green font-bold"><i class="fa-solid fa-check mr-1"></i> Padrão do Alvo: P = (${shipPos[0]}, ${shipPos[1]})</div>`;
-            mathLogContainer.innerHTML = mathHTML;
-
-            modal.classList.remove('hidden');
-        }
-
-        function nextMissionOrReset() {
-            playSound('move');
-            document.getElementById('victory-modal').classList.add('hidden');
-            if (currentMissionNum < TOTAL_MAX_MISSIONS) {
-                loadMission(currentMissionNum + 1);
-            } else {
-                initGameSession();
-            }
-        }
-
-        function generatePDFReport() {
-            if (!currentUser) return alert('Identifique-se primeiro.');
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            doc.setFillColor(3, 7, 18);
-            doc.rect(0, 0, 210, 40, 'F');
-
-            doc.setTextColor(0, 240, 255);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(18);
-            doc.text("RELATÓRIO DE DESEMPENHO - ÁLGEBRA LINEAR", 14, 20);
-
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(10);
-            doc.text("Projeto de Navegação Espacial 2D", 14, 28);
-
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(11);
-            doc.text(`Piloto / Participante: ${currentUser.name}`, 14, 50);
-            doc.text(`Perfil / Função: ${currentUser.role.toUpperCase()}`, 14, 57);
-            doc.text(`E-mail: ${currentUser.email}`, 14, 64);
-            doc.text(`Data da Sessão: ${currentUser.date}`, 14, 71);
-            doc.text(`Total de Passos Gastos nas 5 Missões: ${totalSessionMoves}`, 14, 78);
-
-            let startY = 88;
-
-            if (sessionFullReport.length === 0) {
-                doc.setFontSize(10);
-                doc.setTextColor(150, 0, 0);
-                doc.text("Nenhuma missão foi concluída até o momento nesta sessão.", 14, startY);
-            } else {
-                sessionFullReport.forEach((m) => {
-                    doc.setFontSize(11);
-                    doc.setFont('helvetica', 'bold');
-                    doc.setTextColor(15, 23, 42);
-                    doc.text(`Missão ${m.missionNum}: ${m.missionName} (${m.moves} passos)`, 14, startY);
-                    
-                    startY += 4;
-
-                    const tableRows = m.logs.map((log, idx) => [
-                        `Passo ${idx + 1}`,
-                        log.type,
-                        log.eq
-                    ]);
-
-                    doc.autoTable({
-                        startY: startY,
-                        head: [['Etapa', 'Operação', 'Expressão Algébrica']],
-                        body: tableRows,
-                        theme: 'striped',
-                        headStyles: { fillColor: [11, 19, 43], textColor: [0, 240, 255] },
-                        styles: { fontSize: 8 },
-                        margin: { left: 14, right: 14 }
-                    });
-
-                    startY = doc.lastAutoTable.finalY + 10;
-                });
-            }
-
-            doc.setFontSize(8);
-            doc.setTextColor(120, 120, 120);
-            doc.text("Documento Gerado Automaticamente - Feira de Ciências de Álgebra Linear Aplicada", 14, 285);
-
-            doc.save(`relatorio_espacial_${currentUser.name.replace(/\s+/g, '_').toLowerCase()}.pdf`);
-        }
-
-        function toggleHelpModal(show) {
-            const modal = document.getElementById('help-modal');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+        function updateUI
