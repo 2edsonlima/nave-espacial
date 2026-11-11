@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navegação Espacial - Álgebra Linear Aplicada (Hard Edition)</title>
-    <!-- CDN CSS da Tailwind -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome para Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,23 +22,23 @@
 
     <script>
         tailwind.config = {
-            tema: {
-                estender: {
-                    cores: {
-                        espaço: {
-                            fundo: '#030712',
-                            cartão: '#0b132b',
-                            borda: '#1c2541',
-                            ciano: '#00f0ff',
-                            roxo: '#a855f7',
-                            verde: '#10b981',
-                            rosa: '#f43f5e',
-                            ouro: '#fbbf24'
+            theme: {
+                extend: {
+                    colors: {
+                        space: {
+                            bg: '#030712',
+                            card: '#0b132b',
+                            border: '#1c2541',
+                            cyan: '#00f0ff',
+                            purple: '#a855f7',
+                            green: '#10b981',
+                            rose: '#f43f5e',
+                            gold: '#fbbf24'
                         }
                     },
-                    família_de_fontes: {
-                        orbitron: ['Orbitron', 'sem serifa'],
-                        inter: ['Inter', 'sem serifa']
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif']
                     }
                 }
             }
@@ -46,16 +46,17 @@
     </script>
     
     <style>
-        corpo {
-            cor de fundo: #030712;
-            cor: #f8fafc;
-            família de fontes: 'Inter', sem serifa;
-            imagem de fundo:
-                gradiente-radial(círculo a 15% 15%, rgba(0, 240, 255, 0.07) 0%, transparente 45%),
-                gradiente-radial(círculo em 85% 85%, rgba(168, 85, 247, 0.07) 0%, transparente 45%);
+        body {
+            background-color: #030712;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 240, 255, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.07) 0%, transparent 45%);
         }
         .neon-glow-cyan { box-shadow: 0 0 25px rgba(0, 240, 255, 0.35); }
         .neon-glow-green { box-shadow: 0 0 25px rgba(16, 185, 129, 0.45); }
+        .neon-border-cyan { border-color: rgba(0, 240, 255, 0.5); }
         .control-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .control-btn:hover { transform: translateY(-2px); filter: brightness(1.15); }
         .control-btn:active { transform: translateY(1px); }
@@ -65,7 +66,7 @@
             50% { transform: scale(1.03); }
             100% { transform: scale(1); opacity: 1; }
         }
-        .animate-unlock { animação: unlock-bounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-unlock { animation: unlock-bounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #030712; }
@@ -91,13 +92,13 @@
             <form id="auth-form" onsubmit="handleRegistration(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-orbitron text-space-cyan mb-1.5 uppercase">Nome Completo *</label>
-                    <input type="text" id="user-name" required placeholder="Ex: Alex Santos"
+                    <input type="text" id="user-name" required placeholder="Ex: Alex Santos" 
                         class="w-full bg-slate-950 border border-slate-700 focus:border-space-cyan rounded-xl px-4 py-3 text-xs text-slate-200 outline-none transition-all font-mono">
                 </div>
 
                 <div>
                     <label class="block text-xs font-orbitron text-slate-300 mb-1.5 uppercase">Perfil / Função *</label>
-                    <select id="user-role" onchange="updateEmailRequirement()"
+                    <select id="user-role" onchange="updateEmailRequirement()" 
                         class="w-full bg-slate-950 border border-slate-700 focus:border-space-cyan rounded-xl px-4 py-3 text-xs text-slate-200 outline-none transition-all font-mono">
                         <option value="aluno">Aluno (E-mail obrigatório)</option>
                         <option value="professor">Professor (E-mail opcional)</option>
@@ -110,18 +111,18 @@
                         <label class="block text-xs font-orbitron text-slate-300 uppercase">E-mail</label>
                         <span id="email-req-badge" class="text-[10px] font-mono text-rose-400 font-bold">* Obrigatório</span>
                     </div>
-                    <input type="email" id="user-email" placeholder="piloto@escola.com"
+                    <input type="email" id="user-email" placeholder="piloto@escola.com" 
                         class="w-full bg-slate-950 border border-slate-700 focus:border-space-cyan rounded-xl px-4 py-3 text-xs text-slate-200 outline-none transition-all font-mono">
                 </div>
 
                 <button type="submit" class="w-full mt-2 bg-gradient-to-r from-space-cyan via-blue-500 to-space-purple text-slate-950 font-orbitron font-black py-3.5 rounded-xl text-xs tracking-wider hover:brightness-110 transition-all shadow-lg shadow-cyan-500/20">
                     INICIAR MISSÕES ESPACIAIS <i class="fa-solid fa-play ml-1"></i>
                 </button>
-            </formulário>
+            </form>
         </div>
     </div>
 
-    <!-- MENU OCULTO LATERAL (BARRA LATERAL) -->
+    <!-- MENU LATERAL OCULTO (SIDEBAR) -->
     <div id="sidebar-drawer" class="fixed top-0 right-0 h-full w-80 bg-space-card/95 backdrop-blur-2xl border-l border-slate-800 shadow-2xl z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-5">
         <div>
             <div class="flex items-center justify-between pb-4 border-b border-slate-800">
@@ -147,7 +148,7 @@
                     <span class="text-xs font-orbitron font-bold text-space-gold uppercase flex items-center gap-1.5">
                         <i class="fa-solid fa-trophy"></i> Ranking Global
                     </span>
-                    <span class="text-[10px] text-slate-500 font-mono">Melhores Desempenhos</span>
+                    <span class="text-[10px] text-slate-500 font-mono">Top Desempenhos</span>
                 </div>
                 <div id="leaderboard-list" class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
                     <!-- Gerado via Firebase -->
@@ -185,60 +186,48 @@
 
         <div class="flex items-center gap-2 flex-wrap justify-center">
             <button onclick="toggleAudio()" id="audio-toggle-btn" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-all">
-                Som: <span id="audio-status">Ligado</span>
+                <i class="fa-solid fa-volume-high text-space-cyan mr-1"></i> Som: <span id="audio-status">Ligado</span>
             </button>
             <button onclick="toggleHelpModal(true)" class="px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-space-cyan border border-cyan-500/30 font-orbitron transition-all">
                 <i class="fa-solid fa-graduation-cap mr-1"></i> Guia Explicativo
             </button>
             <button onclick="toggleSidebar(true)" class="px-3 py-2 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-space-purple border border-purple-500/40 font-orbitron transition-all flex items-center gap-1.5">
-                Painel
+                <i class="fa-solid fa-bars"></i> Painel
             </button>
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL: ESTRUTURA RESPONSIVA PERFEITA (MOBILE VS DESKTOP) -->
-    <main class="max-w-7xl mx-auto w-full my-4 flex-grow flex flex-col gap-6">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto w-full my-4 grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
 
-        <!-- ================= MODO MOBILE (Visível apenas em telas menores que lg) ================= -->
-        <div class="flex flex-col gap-5 lg:hidden">
-            <!-- 1. Seletor de Missões -->
-            <div id="mission-selector-card-mobile" class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
+        <!-- PAINEL ESQUERDO: CONTROLES E MISSÕES -->
+        <section class="lg:col-span-5 flex flex-col gap-5">
+            
+            <!-- SELETOR DE MISSÕES -->
+            <div id="mission-selector-card" class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-xs font-orbitron tracking-widest text-space-cyan uppercase">Progresso de Missão (Máx 5)</span>
                     <div class="flex items-center gap-2">
-                        <span id="best-score-m" class="text-[11px] px-2 py-1 rounded-lg bg-amber-950/60 text-space-gold font-mono border border-amber-800/50">🏆 Recorde: --</span>
-                        <span id="move-counter-m" class="text-[11px] px-2 py-1 rounded-lg bg-slate-900 text-space-cyan font-mono border border-slate-800">Passos: 0</span>
+                        <span id="best-score" class="text-[11px] px-2 py-1 rounded-lg bg-amber-950/60 text-space-gold font-mono border border-amber-800/50">🏆 Recorde: --</span>
+                        <span id="move-counter" class="text-[11px] px-2 py-1 rounded-lg bg-slate-900 text-space-cyan font-mono border border-slate-800">Passos: 0</span>
                     </div>
                 </div>
-                <div class="grid grid-cols-5 gap-1.5 mb-3" id="mission-steps-indicator-m"></div>
+
+                <!-- PROGRESSO DAS 5 MISSÕES -->
+                <div class="grid grid-cols-5 gap-1.5 mb-3" id="mission-steps-indicator">
+                    <!-- Indicadores gerados via JS -->
+                </div>
+
                 <div class="flex items-center justify-between gap-2 mb-2">
-                    <span id="mission-title-badge-m" class="font-orbitron font-bold text-sm text-space-cyan">Missão 1 / 5</span>
+                    <span id="mission-title-badge" class="font-orbitron font-bold text-sm text-space-cyan">Missão 1 / 5</span>
                     <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Nível Avançado</span>
                 </div>
-                <div id="mission-description-box-m" class="bg-slate-950/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
+
+                <div id="mission-description-box" class="bg-slate-950/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
             </div>
 
-            <!-- 2. Plano Cartesiano (Painel da Nave) -->
-            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col items-center">
-                <div class="w-full flex justify-between items-center mb-3">
-                    <span class="text-xs font-orbitron text-space-cyan tracking-wider flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-space-cyan animate-pulse"></span> PLANO CARTESIANO (X, Y)
-                    </span>
-                    <div class="flex items-center gap-3 font-mono text-xs">
-                        <span class="text-space-cyan">Nave: <b id="ship-coords-m">(0, 0)</b></span>
-                        <span class="text-space-gold">Alvo: <b id="target-coords-m">(5, 5)</b></span>
-                    </div>
-                </div>
-                <div class="relative bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden shadow-inner flex justify-center items-center">
-                    <canvas id="cartesian-canvas-m" width="340" height="340" class="rounded-lg bg-slate-950"></canvas>
-                </div>
-                <div id="mission-status-banner-m" class="w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i> PONTO BASE-ALVO
-                </div>
-            </div>
-
-            <!-- 3. Base de Movimentação (Propulsão Matricial) - LOGO ABAIXO DA NAVE NO CELULAR -->
-            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col justify-between">
+            <!-- PAINEL DE COMANDOS (VETORES E MATRIZES) -->
+            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex-grow flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center mb-3">
                         <h2 class="font-orbitron font-bold text-sm text-slate-200 tracking-wide">
@@ -247,202 +236,110 @@
                         <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Vetores & Matrizes</span>
                     </div>
 
+                    <!-- Botões de Translação (Soma de Vetores) -->
                     <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">1. Deslocamento (Soma de Vetor $v + u$):</div>
                     <div class="grid grid-cols-4 gap-2 mb-3">
-                        <button onclick="applyTranslation(-1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-left mb-1 text-sm"></i>
+                        <button onclick="applyTranslation(-1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-arrow-left mb-1"></i>
                             <span class="text-[10px] font-mono">[-1, 0]</span>
                         </button>
-                        <button onclick="applyTranslation(1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-right mb-1 text-sm"></i>
+                        <button onclick="applyTranslation(1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-arrow-right mb-1"></i>
                             <span class="text-[10px] font-mono">[+1, 0]</span>
                         </button>
-                        <button onclick="applyTranslation(0, 1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-up mb-1 text-sm"></i>
+                        <button onclick="applyTranslation(0, 1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-arrow-up mb-1"></i>
                             <span class="text-[10px] font-mono">[0, +1]</span>
                         </button>
-                        <button onclick="applyTranslation(0, -1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-arrow-down mb-1 text-sm"></i>
+                        <button onclick="applyTranslation(0, -1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-arrow-down mb-1"></i>
                             <span class="text-[10px] font-mono">[0, -1]</span>
                         </button>
                     </div>
 
+                    <!-- Botões de Rotação e Escala (Matrizes 2x2) -->
                     <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">2. Transformação Linear (Matriz · $v$):</div>
                     <div class="grid grid-cols-3 gap-2 mb-4">
-                        <button onclick="applyRotation()" class="control-btn bg-slate-950 hover:bg-slate-900 border border-purple-500/40 text-space-purple rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-rotate-right mb-1 text-sm"></i>
+                        <button onclick="applyRotation()" class="control-btn bg-slate-950 hover:bg-slate-900 border border-purple-500/40 text-space-purple rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-rotate-right mb-1"></i>
                             <span class="text-[10px] font-mono font-bold">Girar 90°</span>
                         </button>
-                        <button onclick="applyScale(2)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-emerald-500/40 text-space-green rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-expand mb-1 text-sm"></i>
+                        <button onclick="applyScale(2)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-emerald-500/40 text-space-green rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-expand mb-1"></i>
                             <span class="text-[10px] font-mono font-bold">Dobrar (2x)</span>
                         </button>
-                        <button onclick="applyScale(0.5)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-amber-500/40 text-space-gold rounded-xl p-3 flex flex-col items-center justify-center">
-                            <i class="fa-solid fa-compress mb-1 text-sm"></i>
-                            <span class="text-[10px] font-mono font-bold">Metadado (0,5x)</span>
+                        <button onclick="applyScale(0.5)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-amber-500/40 text-space-gold rounded-xl p-2.5 flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-compress mb-1"></i>
+                            <span class="text-[10px] font-mono font-bold">Metade (0.5x)</span>
                         </button>
                     </div>
 
+                    <!-- Botões de Controle -->
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="undoMove()" class="bg-slate-950 hover:bg-slate-900 text-amber-400 border border-amber-500/30 py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                        <button onclick="undoMove()" class="bg-slate-950 hover:bg-slate-900 text-amber-400 border border-amber-500/30 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
                             <i class="fa-solid fa-rotate-left"></i> Desfazer
                         </button>
-                        <button onclick="resetShip()" class="bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-800 py-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                        <button onclick="resetShip()" class="bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-800 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
                             <i class="fa-solid fa-power-off"></i> Reiniciar
                         </button>
                     </div>
                 </div>
 
+                <!-- Histórico de Movimentos -->
                 <div class="mt-4 pt-3 border-t border-slate-800">
                     <span class="text-[11px] text-slate-400 font-orbitron block mb-1.5">Sequência de Comandos:</span>
-                    <div id="history-sequence-m" class="flex flex-wrap gap-1.5 min-h-[30px] items-center bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs font-mono">
+                    <div id="history-sequence" class="flex flex-wrap gap-1.5 min-h-[30px] items-center bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs font-mono">
                         <span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 4. Demonstração Matemática -->
-            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
+        <!-- PAINEL DIREITO: MAPA CARTESIANO (CANVAS) E MATEMÁTICA -->
+        <section class="lg:col-span-7 flex flex-col gap-5">
+            
+            <!-- MAPA CARTESIANO (VISUALIZAÇÃO DA NAVE) -->
+            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-3">
+                    <span class="text-xs font-orbitron text-space-cyan tracking-wider flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-space-cyan animate-pulse"></span> PLANO CARTESIANO (X, Y)
+                    </span>
+                    <div class="flex items-center gap-3 font-mono text-xs">
+                        <span class="text-space-cyan">Nave: <b id="ship-coords">(0, 0)</b></span>
+                        <span class="text-space-gold">Alvo: <b id="target-coords">(5, 5)</b></span>
+                    </div>
+                </div>
+
+                <!-- Canvas do Mapa -->
+                <div class="relative bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden shadow-inner flex justify-center items-center">
+                    <canvas id="cartesian-canvas" width="400" height="400" class="rounded-lg bg-slate-950"></canvas>
+                </div>
+
+                <!-- Status de Pouso -->
+                <div id="mission-status-banner" class="w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> FORA DA BASE-ALVO
+                </div>
+            </div>
+
+            <!-- DEMONSTRAÇÃO MATEMÁTICA -->
+            <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex-grow">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="font-orbitron font-bold text-xs text-slate-200 uppercase tracking-wider flex items-center gap-2">
                         <i class="fa-solid fa-square-root-variable text-space-cyan"></i> Expressão Algébrica Atual
                     </h3>
                     <span class="text-[10px] font-mono text-space-cyan bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">Cálculo Vetorial</span>
                 </div>
+
                 <div class="bg-slate-950 rounded-xl p-3.5 border border-slate-800 text-center font-mono text-xs sm:text-sm text-slate-300">
-                    <span id="math-equation-m" class="text-space-purple font-bold">Posição Inicial: P = (0, 0)</span>
+                    <span id="math-equation" class="text-space-purple font-bold">Posição Inicial: P = (0, 0)</span>
                 </div>
-                <div id="math-explanation-m" class="mt-2.5 text-xs text-slate-400 leading-relaxed text-center">
+
+                <div id="math-explanation" class="mt-2.5 text-xs text-slate-400 leading-relaxed text-center">
                     Use os botões de propulsão para mover a nave pelo plano cartesiano e alcançar o planeta alvo.
                 </div>
             </div>
-        </div>
 
-        <!-- ================= MODO DESKTOP (Visível apenas em lg e superior) ================= -->
-        <div class="hidden lg:grid grid-cols-12 gap-6">
-            <!-- Coluna Esquerda (5 colunas): Missões e Controles -->
-            <div class="col-span-5 flex flex-col gap-6">
-                <!-- Seletor de Missões -->
-                <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-orbitron tracking-widest text-space-cyan uppercase">Progresso de Missão (Máx 5)</span>
-                        <div class="flex items-center gap-2">
-                            <span id="best-score-d" class="text-[11px] px-2 py-1 rounded-lg bg-amber-950/60 text-space-gold font-mono border border-amber-800/50">🏆 Recorde: --</span>
-                            <span id="move-counter-d" class="text-[11px] px-2 py-1 rounded-lg bg-slate-900 text-space-cyan font-mono border border-slate-800">Passos: 0</span>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-5 gap-1.5 mb-3" id="mission-steps-indicator-d"></div>
-                    <div class="flex items-center justify-between gap-2 mb-2">
-                        <span id="mission-title-badge-d" class="font-orbitron font-bold text-sm text-space-cyan">Missão 1 / 5</span>
-                        <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Nível Avançado</span>
-                    </div>
-                    <div id="mission-description-box-d" class="bg-slate-950/80 rounded-xl p-3 border border-slate-800 text-xs text-slate-300 leading-relaxed"></div>
-                </div>
-
-                <!-- Painel de Comandos -->
-                <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex-grow flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h2 class="font-orbitron font-bold text-sm text-slate-200 tracking-wide">
-                                <i class="fa-solid fa-gamepad text-space-purple mr-2"></i>PROPULSÃO MATRICIAL
-                            </h2>
-                            <span class="text-[10px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">Vetores & Matrizes</span>
-                        </div>
-
-                        <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">1. Deslocamento (Soma de Vetor $v + u$):</div>
-                        <div class="grid grid-cols-4 gap-2 mb-3">
-                            <button onclick="applyTranslation(-1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-arrow-left mb-1"></i>
-                                <span class="text-[10px] font-mono">[-1, 0]</span>
-                            </button>
-                            <button onclick="applyTranslation(1, 0)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-arrow-right mb-1"></i>
-                                <span class="text-[10px] font-mono">[+1, 0]</span>
-                            </button>
-                            <button onclick="applyTranslation(0, 1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-arrow-up mb-1"></i>
-                                <span class="text-[10px] font-mono">[0, +1]</span>
-                            </button>
-                            <button onclick="applyTranslation(0, -1)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-slate-800 text-space-cyan rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-arrow-down mb-1"></i>
-                                <span class="text-[10px] font-mono">[0, -1]</span>
-                            </button>
-                        </div>
-
-                        <div class="text-[11px] text-slate-400 font-orbitron mb-1.5">2. Transformação Linear (Matriz · $v$):</div>
-                        <div class="grid grid-cols-3 gap-2 mb-4">
-                            <button onclick="applyRotation()" class="control-btn bg-slate-950 hover:bg-slate-900 border border-purple-500/40 text-space-purple rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-rotate-right mb-1"></i>
-                                <span class="text-[10px] font-mono font-bold">Girar 90°</span>
-                            </button>
-                            <button onclick="applyScale(2)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-emerald-500/40 text-space-green rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-expand mb-1"></i>
-                                <span class="text-[10px] font-mono font-bold">Dobrar (2x)</span>
-                            </button>
-                            <button onclick="applyScale(0.5)" class="control-btn bg-slate-950 hover:bg-slate-900 border border-amber-500/40 text-space-gold rounded-xl p-2.5 flex flex-col items-center justify-center">
-                                <i class="fa-solid fa-compress mb-1"></i>
-                                <span class="text-[10px] font-mono font-bold">Metadado (0,5x)</span>
-                            </button>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-                            <button onclick="undoMove()" class="bg-slate-950 hover:bg-slate-900 text-amber-400 border border-amber-500/30 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
-                                <i class="fa-solid fa-rotate-left"></i> Desfazer
-                            </button>
-                            <button onclick="resetShip()" class="bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-white border border-slate-800 py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
-                                <i class="fa-solid fa-power-off"></i> Reiniciar
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-3 border-t border-slate-800">
-                        <span class="text-[11px] text-slate-400 font-orbitron block mb-1.5">Sequência de Comandos:</span>
-                        <div id="history-sequence-d" class="flex flex-wrap gap-1.5 min-h-[30px] items-center bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs font-mono">
-                            <span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Coluna Direita (7 colunas): Mapa e Matemática -->
-            <div class="col-span-7 flex flex-col gap-6">
-                <!-- Mapa Cartesiano -->
-                <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex flex-col items-center">
-                    <div class="w-full flex justify-between items-center mb-3">
-                        <span class="text-xs font-orbitron text-space-cyan tracking-wider flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-space-cyan animate-pulse"></span> PLANO CARTESIANO (X, Y)
-                        </span>
-                        <div class="flex items-center gap-3 font-mono text-xs">
-                            <span class="text-space-cyan">Nave: <b id="ship-coords-d">(0, 0)</b></span>
-                            <span class="text-space-gold">Alvo: <b id="target-coords-d">(5, 5)</b></span>
-                        </div>
-                    </div>
-                    <div class="relative bg-slate-950 rounded-xl border border-slate-800 p-2 overflow-hidden shadow-inner flex justify-center items-center">
-                        <canvas id="cartesian-canvas-d" width="400" height="400" class="rounded-lg bg-slate-950"></canvas>
-                    </div>
-                    <div id="mission-status-banner-d" class="w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i> PONTO BASE-ALVO
-                    </div>
-                </div>
-
-                <!-- Demonstração Matemática -->
-                <div class="bg-space-card/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md flex-grow flex flex-col justify-center">
-                    <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-orbitron font-bold text-xs text-slate-200 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-square-root-variable text-space-cyan"></i> Expressão Algébrica Atual
-                        </h3>
-                        <span class="text-[10px] font-mono text-space-cyan bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">Cálculo Vetorial</span>
-                    </div>
-                    <div class="bg-slate-950 rounded-xl p-3.5 border border-slate-800 text-center font-mono text-xs sm:text-sm text-slate-300">
-                        <span id="math-equation-d" class="text-space-purple font-bold">Posição Inicial: P = (0, 0)</span>
-                    </div>
-                    <div id="math-explanation-d" class="mt-2.5 text-xs text-slate-400 leading-relaxed text-center">
-                        Use os botões de propulsão para mover a nave pelo plano cartesiano e alcançar o planeta alvo.
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        </section>
     </main>
 
     <!-- RODAPÉ -->
@@ -459,6 +356,7 @@
                 </h3>
                 <button onclick="toggleHelpModal(false)" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            
             <div class="space-y-3.5 text-xs text-slate-300 leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
                 <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
                     <strong class="text-space-cyan font-orbitron block mb-1">🚀 Objetivo do Jogo:</strong>
@@ -473,6 +371,7 @@
                     </ul>
                 </div>
             </div>
+
             <button onclick="toggleHelpModal(false)" class="mt-6 w-full bg-gradient-to-r from-space-cyan to-blue-500 text-slate-950 font-orbitron font-bold py-3 rounded-xl text-xs hover:brightness-110 transition-all shadow-lg">
                 ENTENDI, VAMOS JOGAR!
             </button>
@@ -488,20 +387,25 @@
             <h2 id="modal-victory-title" class="font-orbitron font-black text-xl text-space-green mb-1">POUSO REALIZADO COM SUCESSO!</h2>
             <p id="modal-victory-subtitle" class="text-xs text-slate-400 mb-4 font-mono">Coordenadas calculadas e alcançadas perfeitamente.</p>
 
+            <!-- RESUMO E RECORDE -->
             <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 mb-4 text-left space-y-1.5 text-xs">
                 <div class="flex justify-between"><span class="text-slate-400">Missão Concluída:</span> <span id="modal-mission-name" class="font-bold text-slate-200"></span></div>
                 <div class="flex justify-between"><span class="text-slate-400">Passos Gastos na Fase:</span> <span id="modal-moves-count" class="font-bold text-space-cyan font-mono"></span></div>
                 <div class="flex justify-between pt-1 border-t border-slate-800"><span class="text-slate-400">Total Acumulado:</span> <span id="modal-total-moves" class="font-bold text-space-gold font-mono"></span></div>
             </div>
 
+            <!-- RELATÓRIO COMPLETO DO CÁLCULO MATEMÁTICO REALIZADO -->
             <div class="bg-slate-950/90 p-4 rounded-xl border border-slate-800 mb-6 text-left space-y-2">
                 <div class="flex items-center justify-between border-b border-slate-800 pb-2">
                     <span class="font-orbitron font-bold text-xs text-space-cyan flex items-center gap-2">
-                        <i class="fa-solid fa-calculator"></i> CÁLCULO MATEMÁTICO DE FASE
+                        <i class="fa-solid fa-calculator"></i> CÁLCULO MATEMÁTICO DA FASE
                     </span>
                     <span class="text-[10px] font-mono text-slate-500">Histórico de Operações</span>
                 </div>
-                <div id="modal-math-log" class="max-h-40 overflow-y-auto space-y-2 pr-1 font-mono text-xs"></div>
+                
+                <div id="modal-math-log" class="max-h-40 overflow-y-auto space-y-2 pr-1 font-mono text-xs">
+                    <!-- Gerado dinamicamente -->
+                </div>
             </div>
 
             <div class="flex flex-col gap-2">
@@ -522,26 +426,22 @@
             apiKey: "SUA_API_KEY_AQUI",
             authDomain: "seu-projeto.firebaseapp.com",
             projectId: "seu-projeto",
-            bucket de armazenamento: "seu-projeto.appspot.com",
+            storageBucket: "seu-projeto.appspot.com",
             messagingSenderId: "SEU_MESSAGING_ID",
             appId: "SEU_APP_ID"
         };
 
-        let db = null;
-        tentar {
-            se (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
-            }
-            db = firebase.firestore();
-        } catch (e) {
-            console.warn("Firebase não configurado ou offline. Usando modo local.", e);
+        // Inicializar Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
         }
+        const db = firebase.firestore();
 
         // --- GERENCIAMENTO DE USUÁRIO E CADASTRO ---
-        seja currentUser = null;
+        let currentUser = null;
         const TOTAL_MAX_MISSIONS = 5;
 
-        função atualizarRequisitoDeEmail() {
+        function updateEmailRequirement() {
             const role = document.getElementById('user-role').value;
             const emailInput = document.getElementById('user-email');
             const emailBadge = document.getElementById('email-req-badge');
@@ -550,16 +450,16 @@
                 emailInput.required = true;
                 emailBadge.innerText = '* Obrigatório';
                 emailBadge.className = 'text-[10px] font-mono text-rose-400 font-bold';
-            } outro {
+            } else {
                 emailInput.required = false;
                 emailBadge.innerText = '(Opcional)';
                 emailBadge.className = 'text-[10px] font-mono text-slate-500';
             }
         }
 
-        função handleRegistration(e) {
+        function handleRegistration(e) {
             e.preventDefault();
-            const nome = document.getElementById('user-name').value.trim();
+            const name = document.getElementById('user-name').value.trim();
             const role = document.getElementById('user-role').value;
             const email = document.getElementById('user-email').value.trim();
 
@@ -576,56 +476,51 @@
             initGameSession();
         }
 
-        função logoutUser() {
-            usuárioAtual = nulo;
-            alternarBarraLateral(falso);
+        function logoutUser() {
+            currentUser = null;
+            toggleSidebar(false);
             document.getElementById('auth-modal').classList.remove('hidden');
         }
 
-        função toggleSidebar(mostrar) {
+        function toggleSidebar(show) {
             const sidebar = document.getElementById('sidebar-drawer');
-            se (mostrar) {
+            if (show) {
                 renderLeaderboardUI();
                 sidebar.classList.remove('translate-x-full');
-            } outro {
+            } else {
                 sidebar.classList.add('translate-x-full');
             }
         }
 
         // --- SISTEMA DE LEADERBOARD GLOBAL (FIREBASE) ---
-        função assíncrona salvarParaClassificação(nomeDeUsuário, totalDeMovimentos) {
-            se (!db) retornar;
-            tentar {
+        async function saveToLeaderboard(userName, totalMoves) {
+            try {
                 await db.collection("ranking_espacial").add({
-                    nome: nomeDeUsuário,
-                    movimentos: totalMovimentos,
-                    data: new Date().toLocaleDateString('pt-BR'),
+                    name: userName,
+                    moves: totalMoves,
+                    date: new Date().toLocaleDateString('pt-BR'),
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
-            } catch (erro) {
+                console.log("Pontuação salva na nuvem com sucesso!");
+            } catch (error) {
                 console.error("Erro ao salvar no Firebase: ", error);
             }
         }
 
-        função assíncrona renderizarLeaderboardUI() {
+        async function renderLeaderboardUI() {
             const container = document.getElementById('leaderboard-list');
             container.innerHTML = `<div class="text-[11px] text-slate-500 italic py-2">Carregando ranking global...</div>`;
 
-            se (!db) {
-                container.innerHTML = `<div class="text-[11px] text-rose-400 italic py-2">Firebase não configurado.</div>`;
-                retornar;
-            }
-
-            tentar {
+            try {
                 const snapshot = await db.collection("ranking_espacial").orderBy("moves", "asc").limit(10).get();
                 
-                se (snapshot.vazio) {
+                if (snapshot.empty) {
                     container.innerHTML = `<div class="text-[11px] text-slate-500 italic py-2">Nenhum registro na nuvem ainda.</div>`;
-                    retornar;
+                    return;
                 }
 
                 let html = '';
-                seja idx = 0;
+                let idx = 0;
                 snapshot.forEach((doc) => {
                     const entry = doc.data();
                     html += `
@@ -639,7 +534,7 @@
                     idx++;
                 });
                 container.innerHTML = html;
-            } catch (erro) {
+            } catch (error) {
                 container.innerHTML = `<div class="text-[11px] text-rose-400 italic py-2">Erro ao carregar ranking da nuvem.</div>`;
             }
         }
@@ -648,55 +543,55 @@
         let audioEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        função reproduzirSom(tipo) {
-            se (!audioEnabled) retornar;
-            if (audioCtx.state === 'suspenso') audioCtx.resume();
+        function playSound(type) {
+            if (!audioEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             
             const osc = audioCtx.createOscillator();
-            const ganho = audioCtx.createGain();
-            osc.connect(ganho);
-            ganho.conectar(audioCtx.destino);
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
             const now = audioCtx.currentTime;
 
-            se (tipo === 'mover') {
+            if (type === 'move') {
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(300, now);
                 osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
-                ganho.ganho.definirValorNoTempo(0.12, agora);
-                ganho.ganho.rampalinearParaValorNoTempo(0.01, agora + 0.1);
-                osc.start(agora);
-                osc.stop(agora + 0.1);
-            } senão se (tipo === 'sucesso') {
-                osc.type = 'triângulo';
+                gain.gain.setValueAtTime(0.12, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'triangle';
                 osc.frequency.setValueAtTime(440, now);
                 osc.frequency.setValueAtTime(554.37, now + 0.1);
                 osc.frequency.setValueAtTime(659.25, now + 0.2);
                 osc.frequency.setValueAtTime(880, now + 0.3);
-                ganho.ganho.definirValorNoTempo(0.2, agora);
-                ganho.ganho.rampalinearParaValorNoTempo(0.01, agora + 0.5);
-                osc.start(agora);
-                osc.stop(agora + 0.5);
-            } senão se (tipo === 'desfazer') {
-                osc.type = 'dente de serra';
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'undo') {
+                osc.type = 'sawtooth';
                 osc.frequency.setValueAtTime(250, now);
                 osc.frequency.linearRampToValueAtTime(120, now + 0.1);
-                ganho.ganho.definirValorNoTempo(0.1, agora);
-                ganho.ganho.rampalinearParaValorNoTempo(0.01, agora + 0.1);
-                osc.start(agora);
-                osc.stop(agora + 0.1);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
             }
         }
 
-        função triggerConfetti() {
-            se (typeof confete === 'função') {
-                confete({ contagemDePartículas: 120, espalhamento: 80, origem: { y: 0.6 } });
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
             }
         }
 
-        função alternarÁudio() {
-            áudioAtivado = !áudioAtivado;
-            document.getElementById('audio-status').innerText = audioEnabled ? "Ligado" : "";
-            document.getElementById('audio-toggle-btn').className = audioEnabled
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('audio-status').innerText = audioEnabled ? "Ligado" : "Desligado";
+            document.getElementById('audio-toggle-btn').className = audioEnabled 
                 ? "px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 transition-all"
                 : "px-3 py-2 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-rose-400 border border-rose-900/40 transition-all";
         }
@@ -707,49 +602,48 @@
             "Singularidade Matricial", "Órbita Anti-Horária Complexa", "Hiper-Salto Coordenado"
         ];
 
-        função gerarMissãoDifícil(num) {
-            sejam tx, ty, sx, sy;
-            se (num === 1) { sx = 0; onde = 0; x = 5; ty = −4; }
-            senão se (num === 2) { sx = -2; sy = 3; tx = 6; ty = 6; }
-            senão se (num === 3) { sx = 1; sy = -1; tx = -6; ty = 6; }
-            senão se (num === 4) { sx = 4; sy = 4; tx = -5; ty = -7; }
-            senão {sx = -3; si = -3; tx = 7; ty = 5; }
+        function generateHardMission(num) {
+            let tx, ty, sx, sy;
+            if (num === 1) { sx = 0; sy = 0; tx = 5; ty = -4; }
+            else if (num === 2) { sx = -2; sy = 3; tx = 6; ty = 6; }
+            else if (num === 3) { sx = 1; sy = -1; tx = -6; ty = 6; }
+            else if (num === 4) { sx = 4; sy = 4; tx = -5; ty = -7; }
+            else { sx = -3; sy = -3; tx = 7; ty = 5; }
 
-            retornar {
-                ou seja: se,
+            return {
+                id: num,
                 title: `Missão ${num}`,
                 name: hardMissionNames[num - 1] || "Salto Quântico",
-                desc: `DIFICULDADE DIFÍCIL: Navegue da origem (${sx}, ${sy}) até as coordenadas complexas (${tx}, ${ty}) usando rotação e escala.`,
-                início: [sx, sy],
-                alvo: [tx, ty]
+                desc: `DIFICULDADE HARD: Navegue da origem (${sx}, ${sy}) até as coordenadas complexas (${tx}, ${ty}) utilizando rotação e escala.`,
+                start: [sx, sy],
+                target: [tx, ty]
             };
         }
 
-        seja currentMissionNum = 1;
-        seja currentMission = null;
-        seja shipPos = [0, 0];
-        seja targetPos = [5, -4];
-        seja movesCount = 0;
-        seja totalSessionMoves = 0;
+        let currentMissionNum = 1;
+        let currentMission = null;
+        let shipPos = [0, 0];
+        let targetPos = [5, -4];
+        let movesCount = 0;
+        let totalSessionMoves = 0;
         let commandHistory = [];
         let mathLogHistory = [];
         let sessionFullReport = [];
         let stateHistoryStack = [];
 
+        const canvas = document.getElementById('cartesian-canvas');
+        const ctx = canvas.getContext('2d');
         const gridSize = 10;
 
-        função desenharCanvas(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            se (!canvas) retornar;
-            const ctx = canvas.getContext('2d');
+        function drawCartesianGrid() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const width = canvas.width;
-            const altura = canvas.altura;
-            const passo = largura / (tamanhoDaGrade * 2);
+            const height = canvas.height;
+            const step = width / (gridSize * 2);
 
             ctx.strokeStyle = '#111827';
             ctx.lineWidth = 1;
-            para (seja i = 0; i <= largura; i += passo) {
+            for (let i = 0; i <= width; i += step) {
                 ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, height); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(width, i); ctx.stroke();
             }
@@ -757,23 +651,23 @@
             ctx.strokeStyle = '#334155';
             ctx.lineWidth = 2;
             ctx.beginPath(); ctx.moveTo(width / 2, 0); ctx.lineTo(width / 2, height); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(0, altura / 2); ctx.lineTo(largura, altura / 2); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2); ctx.stroke();
 
-            função paraPixels(x, y) {
-                retornar { x: largura / 2 + x * passo, y: altura / 2 - y * passo };
+            function toPixels(x, y) {
+                return { x: width / 2 + x * step, y: height / 2 - y * step };
             }
 
             const targetPx = toPixels(targetPos[0], targetPos[1]);
             ctx.fillStyle = '#fbbf24';
             ctx.beginPath();
-            ctx.arc(targetPx.x, targetPx.y, 11, 0, Math.PI * 2);
+            ctx.arc(targetPx.x, targetPx.y, 12, 0, Math.PI * 2);
             ctx.fill();
             ctx.strokeStyle = '#f59e0b';
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 3;
             ctx.stroke();
 
             ctx.fillStyle = '#030712';
-            ctx.font = '9px Orbitron';
+            ctx.font = '10px Orbitron';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('ALVO', targetPx.x, targetPx.y);
@@ -781,80 +675,63 @@
             const shipPx = toPixels(shipPos[0], shipPos[1]);
             ctx.fillStyle = '#00f0ff';
             ctx.beginPath();
-            ctx.arc(shipPx.x, shipPx.y, 9, 0, Math.PI * 2);
+            ctx.arc(shipPx.x, shipPx.y, 10, 0, Math.PI * 2);
             ctx.fill();
             ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 3;
             ctx.stroke();
 
             ctx.fillStyle = '#030712';
-            ctx.font = '8px FontAwesome';
+            ctx.font = '9px FontAwesome';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('\uf135', shipPx.x, shipPx.y);
         }
 
-        função desenharGradesCartesianas() {
-            desenharCanvas('canvas-cartesiana-m');
-            drawCanvas('cartesian-canvas-d');
-        }
-
-        função initGameSession() {
+        function initGameSession() {
             currentMissionNum = 1;
             totalSessionMoves = 0;
             sessionFullReport = [];
-            carregarMissão(1);
+            loadMission(1);
         }
 
-        função renderizarIndicadorDePassosDaMissão() {
-            const containerM = document.getElementById('mission-steps-indicator-m');
-            const containerD = document.getElementById('mission-steps-indicator-d');
-            
-            let html = '';
-            para (seja i = 1; i <= TOTAL_MAX_MISSIONS; i++) {
-                html += `<div class="h-2 rounded-full transition-all ${i === currentMissionNum ? 'bg-space-cyan shadow-lg shadow-cyan-500/50' : i < currentMissionNum ? 'bg-space-green' : 'bg-slate-900 border border-slate-800'}"></div>`;
+        function renderMissionStepsIndicator() {
+            const container = document.getElementById('mission-steps-indicator');
+            container.innerHTML = '';
+            for (let i = 1; i <= TOTAL_MAX_MISSIONS; i++) {
+                const step = document.createElement('div');
+                step.className = `h-2 rounded-full transition-all ${i === currentMissionNum ? 'bg-space-cyan shadow-lg shadow-cyan-500/50' : i < currentMissionNum ? 'bg-space-green' : 'bg-slate-900 border border-slate-800'}`;
+                container.appendChild(step);
             }
-            se (containerM) containerM.innerHTML = html;
-            se (containerD) containerD.innerHTML = html;
         }
 
-        função carregarMissão(num) {
+        function loadMission(num) {
             currentMissionNum = num;
-            missãoAtual = gerarMissãoDifícil(num);
+            currentMission = generateHardMission(num);
             shipPos = [...currentMission.start];
             targetPos = [...currentMission.target];
-            contagemDeMovimentos = 0;
+            movesCount = 0;
             commandHistory = [];
             mathLogHistory = [];
             stateHistoryStack = [];
 
             renderMissionStepsIndicator();
 
-            const titleText = `Missão ${currentMission.id} / ${TOTAL_MAX_MISSIONS}: ${currentMission.name}`;
-            const descHtml = `<div>${currentMission.desc}</div>`;
-
-            if (document.getElementById('mission-title-badge-m')) document.getElementById('mission-title-badge-m').innerText = titleText;
-            if (document.getElementById('mission-title-badge-d')) document.getElementById('mission-title-badge-d').innerText = titleText;
-            if (document.getElementById('missão-descrição-box-m')) document.getElementById('missão-descrição-box-m').innerHTML = descHtml;
-            if (document.getElementById('missão-descrição-box-d')) document.getElementById('missão-descrição-box-d').innerHTML = descHtml;
+            document.getElementById('mission-title-badge').innerText = `Missão ${currentMission.id} / ${TOTAL_MAX_MISSIONS}: ${currentMission.name}`;
+            document.getElementById('mission-description-box').innerHTML = `<div>${currentMission.desc}</div>`;
             
-            atualizarUI();
-            
-            const initEq = `Posição Inicial: P₀(${shipPos[0]}, ${shipPos[1]})`;
-            const initExp = `Mova a nave até o planeta em (${targetPos[0]}, ${targetPos[1]}).`;
-            se (document.getElementById('math-equation-m')) document.getElementById('math-equation-m').innerText = initEq;
-            se (document.getElementById('math-equation-d')) document.getElementById('math-equation-d').innerText = initEq;
-            if (document.getElementById('math-explanation-m')) document.getElementById('math-explanation-m').innerText = initExp;
-            if (document.getElementById('math-explanation-d')) document.getElementById('math-explanation-d').innerText = initExp;
+            updateUI();
+            document.getElementById('math-equation').innerText = `Posição Inicial: P₀(${shipPos[0]}, ${shipPos[1]})`;
+            document.getElementById('math-explanation').innerText = `Mova a nave até o planeta em (${targetPos[0]}, ${targetPos[1]}).`;
         }
 
-        função aplicarTranslação(dx, dy) {
-            reproduzirSom('movimento');
+        function applyTranslation(dx, dy) {
+            playSound('move');
             stateHistoryStack.push({ pos: [...shipPos], history: [...commandHistory], mathLog: [...mathLogHistory] });
 
             const oldPos = [...shipPos];
             shipPos[0] += dx;
-            shipPos[1] += isto;
+            shipPos[1] += dy;
             movesCount++;
             
             const cmdText = `+ [${dx > 0 ? '+' + dx : dx}, ${dy > 0 ? '+' + dy : dy}]`;
@@ -863,19 +740,15 @@
             const mathEq = `(${oldPos[0]}, ${oldPos[1]}) + (${dx}, ${dy}) = (${shipPos[0]}, ${shipPos[1]})`;
             mathLogHistory.push({ type: 'Translação', eq: mathEq });
 
-            const eqText = `P_novo = ${mathEq}`;
-            const expText = `Adição de Vetores: deslocamento aplicado às coordenadas.`;
-            if (document.getElementById('math-equation-m')) document.getElementById('math-equation-m').innerText = eqText;
-            if (document.getElementById('math-equation-d')) document.getElementById('math-equation-d').innerText = eqText;
-            if (document.getElementById('math-explanation-m')) document.getElementById('math-explanation-m').innerText = expText;
-            if (document.getElementById('math-explanation-d')) document.getElementById('math-explanation-d').innerText = expText;
+            document.getElementById('math-equation').innerText = `P_novo = ${mathEq}`;
+            document.getElementById('math-explanation').innerText = `Adição de Vetores: deslocamento aplicado às coordenadas.`;
 
-            atualizarUI();
-            verificarVitória();
+            updateUI();
+            checkVictory();
         }
 
-        função aplicarRotação() {
-            reproduzirSom('movimento');
+        function applyRotation() {
+            playSound('move');
             stateHistoryStack.push({ pos: [...shipPos], history: [...commandHistory], mathLog: [...mathLogHistory] });
 
             const oldPos = [...shipPos];
@@ -887,19 +760,15 @@
             const mathEq = `R(90°) · (${oldPos[0]}, ${oldPos[1]}) = (${shipPos[0]}, ${shipPos[1]})`;
             mathLogHistory.push({ type: 'Rotação 90°', eq: mathEq });
 
-            const eqText = `[ 0 -1 ] · [${oldPos[0]}] = [${shipPos[0]}]\n[ 1 0 ] [${oldPos[1]}] [${shipPos[1]}]`;
-            const expText = `Multiplicação por Matriz de Rotação 2D (90° Anti-horário).`;
-            if (document.getElementById('math-equation-m')) document.getElementById('math-equation-m').innerText = eqText;
-            if (document.getElementById('math-equation-d')) document.getElementById('math-equation-d').innerText = eqText;
-            if (document.getElementById('math-explanation-m')) document.getElementById('math-explanation-m').innerText = expText;
-            if (document.getElementById('math-explanation-d')) document.getElementById('math-explanation-d').innerText = expText;
+            document.getElementById('math-equation').innerText = `[ 0 -1 ] · [${oldPos[0]}] = [${shipPos[0]}]\n[ 1  0 ]   [${oldPos[1]}]   [${shipPos[1]}]`;
+            document.getElementById('math-explanation').innerText = `Multiplicação por Matriz de Rotação 2D (90° Anti-horário).`;
 
-            atualizarUI();
-            verificarVitória();
+            updateUI();
+            checkVictory();
         }
 
-        função aplicarEscala(fator) {
-            reproduzirSom('movimento');
+        function applyScale(factor) {
+            playSound('move');
             stateHistoryStack.push({ pos: [...shipPos], history: [...commandHistory], mathLog: [...mathLogHistory] });
 
             const oldPos = [...shipPos];
@@ -911,110 +780,88 @@
             const mathEq = `${factor} · (${oldPos[0]}, ${oldPos[1]}) = (${shipPos[0]}, ${shipPos[1]})`;
             mathLogHistory.push({ type: `Escala ${factor}x`, eq: mathEq });
 
-            const eqText = `Escala (${factor}x) · (${oldPos[0]}, ${oldPos[1]}) = (${shipPos[0]}, ${shipPos[1]})`;
-            const expText = `Multiplicação por Escalar (Transformação Diagonal).`;
-            if (document.getElementById('math-equation-m')) document.getElementById('math-equation-m').innerText = eqText;
-            if (document.getElementById('math-equation-d')) document.getElementById('math-equation-d').innerText = eqText;
-            if (document.getElementById('math-explanation-m')) document.getElementById('math-explanation-m').innerText = expText;
-            if (document.getElementById('math-explanation-d')) document.getElementById('math-explanation-d').innerText = expText;
+            document.getElementById('math-equation').innerText = `Escala (${factor}x) · (${oldPos[0]}, ${oldPos[1]}) = (${shipPos[0]}, ${shipPos[1]})`;
+            document.getElementById('math-explanation').innerText = `Multiplicação por Escalar (Transformação Diagonal).`;
 
-            atualizarUI();
-            verificarVitória();
+            updateUI();
+            checkVictory();
         }
 
-        função desfazerMovimento() {
-            se (stateHistoryStack.length === 0) retorne;
-            reproduzirSom('desfazer');
+        function undoMove() {
+            if (stateHistoryStack.length === 0) return;
+            playSound('undo');
             const lastState = stateHistoryStack.pop();
             shipPos = lastState.pos;
             commandHistory = lastState.history;
             mathLogHistory = lastState.mathLog || [];
             movesCount = Math.max(0, movesCount - 1);
-            atualizarUI();
+            updateUI();
         }
 
-        função resetShip() {
-            reproduzirSom('movimento');
-            carregarMissão(númeroMissãoAtual);
+        function resetShip() {
+            playSound('move');
+            loadMission(currentMissionNum);
         }
 
-        função atualizarUI() {
-            const coordsText = `(${shipPos[0]}, ${shipPos[1]})`;
-            const targetText = `(${targetPos[0]}, ${targetPos[1]})`;
-            const movesText = `Passos: ${movesCount}`;
-
-            if (document.getElementById('ship-coords-m')) document.getElementById('ship-coords-m').innerText = coordsText;
-            if (document.getElementById('ship-coords-d')) document.getElementById('ship-coords-d').innerText = coordsText;
-            if (document.getElementById('target-coords-m')) document.getElementById('target-coords-m').innerText = targetText;
-            if (document.getElementById('target-coords-d')) document.getElementById('target-coords-d').innerText = targetText;
-            if (document.getElementById('move-counter-m')) document.getElementById('move-counter-m').innerText = movesText;
-            if (document.getElementById('move-counter-d')) document.getElementById('move-counter-d').innerText = movesText;
-
+        function updateUI() {
+            document.getElementById('ship-coords').innerText = `(${shipPos[0]}, ${shipPos[1]})`;
+            document.getElementById('target-coords').innerText = `(${targetPos[0]}, ${targetPos[1]})`;
+            document.getElementById('move-counter').innerText = `Passos: ${movesCount}`;
             renderHistory();
-            desenharGradesCartesianas();
+            drawCartesianGrid();
         }
 
-        função renderizarHistórico() {
-            let html = '';
-            se (commandHistory.length === 0) {
-                html = `<span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>`;
-            } outro {
-                html = commandHistory.map((c, i) => `
-                    <span class="px-2 py-0.5 rounded border text-[11px] font-bold text-space-cyan border-cyan-800 bg-cyan-950/60">${c}</span>${i < commandHistory.length - 1 ? '<span class="text-slate-600">→</span>' : ''}
-                `).join('');
+        function renderHistory() {
+            const container = document.getElementById('history-sequence');
+            if (commandHistory.length === 0) {
+                container.innerHTML = `<span class="text-slate-600 text-[11px] italic">Nenhum comando executado</span>`;
+                return;
             }
-
-            if (document.getElementById('history-sequence-m')) document.getElementById('history-sequence-m').innerHTML = html;
-            if (document.getElementById('history-sequence-d')) document.getElementById('history-sequence-d').innerHTML = html;
+            container.innerHTML = commandHistory.map((c, i) => `
+                <span class="px-2 py-0.5 rounded border text-[11px] font-bold text-space-cyan border-cyan-800 bg-cyan-950/60">${c}</span>${i < commandHistory.length - 1 ? '<span class="text-slate-600">→</span>' : ''}
+            `).join('');
         }
 
-        função verificarVitória() {
-            const bannerM = document.getElementById('mission-status-banner-m');
-            const bannerD = document.getElementById('mission-status-banner-d');
+        function checkVictory() {
+            const statusBanner = document.getElementById('mission-status-banner');
 
-            se (shipPos[0] === targetPos[0] && shipPos[1] === targetPos[1]) {
-                reproduzirSom('sucesso');
+            if (shipPos[0] === targetPos[0] && shipPos[1] === targetPos[1]) {
+                playSound('success');
                 triggerConfetti();
 
-                totalSessãoMovimentos += contagemDeMovimentos;
+                totalSessionMoves += movesCount;
 
                 sessionFullReport.push({
                     missionNum: currentMissionNum,
-                    nomeDaMissão: nomeDaMissãoAtual,
-                    startPos: [... missão atual.start],
+                    missionName: currentMission.name,
+                    startPos: [...currentMission.start],
                     targetPos: [...currentMission.target],
-                    movimentos: contagemDeMovimentos,
+                    moves: movesCount,
                     logs: [...mathLogHistory]
                 });
 
-                const successClass = "w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-emerald-950/90 text-space-green border border-emerald-500 flex items-center justify-center gap-2";
-                const successHtml = `<i class="fa-solid fa-flag-checkered"></i> POUSO CONFIRMADO NO ALVO!`;
-
-                if (bannerM) { bannerM.className = successClass; bannerM.innerHTML = successHtml; }
-                if (bannerD) { bannerD.className = successClass; bannerD.innerHTML = successHtml; }
+                statusBanner.className = "w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-emerald-950/90 text-space-green border border-emerald-500 flex items-center justify-center gap-2 neon-glow-green";
+                statusBanner.innerHTML = `<i class="fa-solid fa-flag-checkered"></i> POUSO CONFIRMADO NO ALVO!`;
 
                 setTimeout(() => showVictoryModal(), 400);
-            } outro {
-                const failClass = "w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2";
-                const failHtml = `<i class="fa-solid fa-triangle-exclamation"></i> FORA DA BASE-ALVO`;
-
-                if (bannerM) { bannerM.className = failClass; bannerM.innerHTML = failHtml; }
-                if (bannerD) { bannerD.className = failClass; bannerD.innerHTML = failHtml; }
+            } else {
+                statusBanner.className = "w-full mt-3 text-xs font-orbitron font-bold text-center p-2.5 rounded-xl bg-rose-950/60 text-space-rose border border-rose-800/50 flex items-center justify-center gap-2";
+                statusBanner.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> FORA DA BASE-ALVO`;
             }
         }
 
-        função showVictoryModal() {
+        function showVictoryModal() {
             const modal = document.getElementById('victory-modal');
             const isLastMission = currentMissionNum >= TOTAL_MAX_MISSIONS;
 
-            se (éÚltimaMissão) {
+            if (isLastMission) {
                 document.getElementById('modal-victory-title').innerText = "JOGO CONCLUÍDO COM SUCESSO!";
                 document.getElementById('modal-victory-subtitle').innerText = `Você completou todas as ${TOTAL_MAX_MISSIONS} missões em nível HARD!`;
                 document.getElementById('btn-next-step').innerText = "REINICIAR TODAS AS MISSÕES";
                 document.getElementById('btn-download-pdf-modal').classList.remove('hidden');
 
-                se (usuárioAtual) salvarNoClassificador(usuárioAtual.nome, totalMovimentosDaSessão);
-            } outro {
+                if (currentUser) saveToLeaderboard(currentUser.name, totalSessionMoves);
+            } else {
                 document.getElementById('modal-victory-title').innerText = "POUSO REALIZADO COM SUCESSO!";
                 document.getElementById('modal-victory-subtitle').innerText = "Coordenadas calculadas e alcançadas perfeitamente.";
                 document.getElementById('btn-next-step').innerText = `PRÓXIMA MISSÃO (${currentMissionNum + 1}/${TOTAL_MAX_MISSIONS})`;
@@ -1038,23 +885,23 @@
             });
 
             mathHTML += `<div class="p-2 rounded bg-emerald-950/80 border border-emerald-800/80 text-space-green font-bold"><i class="fa-solid fa-check mr-1"></i> Padrão do Alvo: P = (${shipPos[0]}, ${shipPos[1]})</div>`;
-            mathLogContainer.innerHTML = matemáticaHTML;
+            mathLogContainer.innerHTML = mathHTML;
 
             modal.classList.remove('hidden');
         }
 
-        função próximaMissãoOuReiniciar() {
-            reproduzirSom('movimento');
+        function nextMissionOrReset() {
+            playSound('move');
             document.getElementById('victory-modal').classList.add('hidden');
-            se (número_de_missões_atual < TOTAL_MAX_MISSIONS) {
-                carregarMissão(númeroMissãoAtual + 1);
-            } outro {
+            if (currentMissionNum < TOTAL_MAX_MISSIONS) {
+                loadMission(currentMissionNum + 1);
+            } else {
                 initGameSession();
             }
         }
 
-        função generatePDFReport() {
-            if (! currentUser) return alert('Identifique-se primeiro.');
+        function generatePDFReport() {
+            if (!currentUser) return alert('Identifique-se primeiro.');
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
@@ -1078,13 +925,13 @@
             doc.text(`Data da Sessão: ${currentUser.date}`, 14, 71);
             doc.text(`Total de Passos Gastos nas 5 Missões: ${totalSessionMoves}`, 14, 78);
 
-            seja startY = 88;
+            let startY = 88;
 
-            se (sessionFullReport.length === 0) {
+            if (sessionFullReport.length === 0) {
                 doc.setFontSize(10);
                 doc.setTextColor(150, 0, 0);
                 doc.text("Nenhuma missão foi concluída até o momento nesta sessão.", 14, startY);
-            } outro {
+            } else {
                 sessionFullReport.forEach((m) => {
                     doc.setFontSize(11);
                     doc.setFont('helvetica', 'bold');
@@ -1095,18 +942,18 @@
 
                     const tableRows = m.logs.map((log, idx) => [
                         `Passo ${idx + 1}`,
-                        tipo de log,
+                        log.type,
                         log.eq
                     ]);
 
                     doc.autoTable({
-                        começa: começa,
+                        startY: startY,
                         head: [['Etapa', 'Operação', 'Expressão Algébrica']],
-                        corpo: linhasDaTabela,
-                        tema: 'listrado',
-                        estilosDoCabeçalho: { corDePreenchimento: [11, 19, 43], corDoTexto: [0, 240, 255] },
-                        estilos: { tamanhoDaFonte: 8 },
-                        margem: { esquerda: 14, direita: 14 }
+                        body: tableRows,
+                        theme: 'striped',
+                        headStyles: { fillColor: [11, 19, 43], textColor: [0, 240, 255] },
+                        styles: { fontSize: 8 },
+                        margin: { left: 14, right: 14 }
                     });
 
                     startY = doc.lastAutoTable.finalY + 10;
@@ -1120,10 +967,10 @@
             doc.save(`relatorio_espacial_${currentUser.name.replace(/\s+/g, '_').toLowerCase()}.pdf`);
         }
 
-        função toggleHelpModal(mostrar) {
+        function toggleHelpModal(show) {
             const modal = document.getElementById('help-modal');
             if (show) modal.classList.remove('hidden');
-            senão modal.classList.add('hidden');
+            else modal.classList.add('hidden');
         }
     </script>
 </body>
