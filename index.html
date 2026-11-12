@@ -64,7 +64,7 @@
     }
 
     .title-area h1 {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       letter-spacing: 1px;
       color: #00f3ff;
@@ -72,14 +72,37 @@
       font-family: 'Courier New', Courier, monospace;
     }
 
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
     .badge-fase {
       background: rgba(255, 0, 127, 0.2);
       color: #ff4da6;
       border: 1px solid rgba(255, 0, 127, 0.5);
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 20px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
+    }
+
+    .btn-ajuda {
+      background: rgba(0, 243, 255, 0.15);
+      color: #00f3ff;
+      border: 1px solid rgba(0, 243, 255, 0.4);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-ajuda:hover {
+      background: #00f3ff;
+      color: #070913;
     }
 
     .progress-bar-container {
@@ -127,7 +150,6 @@
       white-space: pre-line;
     }
 
-    /* Caixa de explicação com alto contraste */
     .explanation-box {
       background: #131b31;
       border: 1px solid rgba(0, 243, 255, 0.45);
@@ -196,7 +218,115 @@
       transition: color 0.3s ease;
     }
 
-    /* Victory screen */
+    /* Modal de Ajuda & Calculadora */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(7, 9, 19, 0.92);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.ativo {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: #12182d;
+      border: 1px solid #00f3ff;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0, 243, 255, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+    }
+
+    .modal-header h3 {
+      color: #00f3ff;
+      font-size: 1.1rem;
+    }
+
+    .btn-fechar {
+      background: none;
+      border: none;
+      color: #ff4da6;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .calc-screen {
+      width: 100%;
+      background: #05070f;
+      border: 1px solid rgba(0, 243, 255, 0.4);
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.3rem;
+      padding: 12px;
+      text-align: right;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .calc-btn {
+      background: #1e2642;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .calc-btn:hover {
+      background: #00f3ff;
+      color: #070913;
+    }
+
+    .calc-btn.op {
+      background: rgba(0, 243, 255, 0.2);
+      color: #00f3ff;
+    }
+
+    .calc-btn.igual {
+      background: var(--accent-green);
+      color: #070913;
+      grid-column: span 2;
+    }
+
+    .calc-btn.limpar {
+      background: rgba(255, 0, 127, 0.2);
+      color: #ff4da6;
+    }
+
     .victory-screen {
       text-align: center;
       padding: 30px 10px;
@@ -262,7 +392,10 @@
       <div class="title-area">
         <h1>⚡ Desafio Quântico</h1>
       </div>
-      <div class="badge-fase" id="fase-titulo">Fase 1 / 6</div>
+      <div class="header-actions">
+        <button class="btn-ajuda" onclick="alternarModal(true)">? Ajuda / Calc</button>
+        <div class="badge-fase" id="fase-titulo">Fase 1 / 6</div>
+      </div>
     </div>
 
     <div class="progress-bar-container">
@@ -284,6 +417,45 @@
       </div>
 
       <div class="msg" id="mensagem"></div>
+    </div>
+
+    <!-- Modal de Ajuda & Calculadora -->
+    <div class="modal-overlay" id="modal-ajuda">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>🧮 Calculadora Quântica</h3>
+          <button class="btn-fechar" onclick="alternarModal(false)">✕</button>
+        </div>
+        <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">
+          Use esta calculadora para conferir suas contas ou somar/multiplicar valores!
+        </div>
+        <input type="text" class="calc-screen" id="calc-tela" readonly value="0">
+        <div class="calc-grid">
+          <button class="calc-btn limpar" onclick="calcLimpar()">C</button>
+          <button class="calc-btn op" onclick="calcDigitar('(')">(</button>
+          <button class="calc-btn op" onclick="calcDigitar(')')">)</button>
+          <button class="calc-btn op" onclick="calcDigitar('/')">÷</button>
+          
+          <button class="calc-btn" onclick="calcDigitar('7')">7</button>
+          <button class="calc-btn" onclick="calcDigitar('8')">8</button>
+          <button class="calc-btn" onclick="calcDigitar('9')">9</button>
+          <button class="calc-btn op" onclick="calcDigitar('*')">×</button>
+          
+          <button class="calc-btn" onclick="calcDigitar('4')">4</button>
+          <button class="calc-btn" onclick="calcDigitar('5')">5</button>
+          <button class="calc-btn" onclick="calcDigitar('6')">6</button>
+          <button class="calc-btn op" onclick="calcDigitar('-')">-</button>
+          
+          <button class="calc-btn" onclick="calcDigitar('1')">1</button>
+          <button class="calc-btn" onclick="calcDigitar('2')">2</button>
+          <button class="calc-btn" onclick="calcDigitar('3')">3</button>
+          <button class="calc-btn op" onclick="calcDigitar('+')">+</button>
+          
+          <button class="calc-btn" onclick="calcDigitar('0')">0</button>
+          <button class="calc-btn" onclick="calcDigitar('.')">.</button>
+          <button class="calc-btn igual" onclick="calcCalcular()">=</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -309,8 +481,7 @@
           const a = Math.floor(Math.random() * 10) + 2;
           const b = Math.floor(Math.random() * 10) + 2;
           return {
-            enunciado: `Some os vetores unidimensionais:
-A = [${a}]  e  B = [${b}]`,
+            enunciado: `Some os vetores unidimensionais:\nA = [${a}]  e  B = [${b}]`,
             explicacao: `<strong>Regra de ouro:</strong> A soma de vetores é feita somando componente a componente. Como temos apenas uma dimensão, some diretamente: ${a} + ${b}.`,
             resposta: a + b
           };
@@ -325,11 +496,8 @@ A = [${a}]  e  B = [${b}]`,
           const c = Math.floor(Math.random() * 3) + 1;
           const d = Math.floor(Math.random() * 4) + 2;
           return {
-            enunciado: `Calcule o determinante da matriz 2x2:
-| ${a}   ${b} |
-| ${c}   ${d} |`,
-            explicacao: `<strong>Regra de ouro:</strong> O determinante de uma matriz 2x2 [[a, b], [c, d]] é dado por (a × d) - (b × c).
-Cálculo: (${a} × ${d}) - (${b} × ${c}) = ${a * d} - ${b * c}.`,
+            enunciado: `Calcule o determinante da matriz 2x2:\n| ${a}   ${b} |\n| ${c}   ${d} |`,
+            explicacao: `<strong>Regra de ouro:</strong> O determinante de uma matriz 2x2 [[a, b], [c, d]] é dado por (a × d) - (b × c).\nCálculo: (${a} × ${d}) - (${b} × ${c}) = ${a * d} - ${b * c}.`,
             resposta: (a * d) - (b * c)
           };
         }
@@ -343,10 +511,8 @@ Cálculo: (${a} × ${d}) - (${b} × ${c}) = ${a * d} - ${b * c}.`,
           const x2 = Math.floor(Math.random() * 4) + 1;
           const y2 = Math.floor(Math.random() * 3) + 1;
           return {
-            enunciado: `Calcule o produto escalar dos vetores:
-u = (${x1}, ${y1})  e  v = (${x2}, ${y2})`,
-            explicacao: `<strong>Regra de ouro:</strong> Multiplique as coordenadas correspondentes e depois some os resultados: (x₁ × x₂) + (y₁ × y₂).
-Cálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
+            enunciado: `Calcule o produto escalar dos vetores:\nu = (${x1}, ${y1})  e  v = (${x2}, ${y2})`,
+            explicacao: `<strong>Regra de ouro:</strong> Multiplique as coordenadas correspondentes e depois some os resultados: (x₁ × x₂) + (y₁ × y₂).\nCálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
             resposta: (x1 * x2) + (y1 * y2)
           };
         }
@@ -362,9 +528,7 @@ Cálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
           const vx = Math.floor(Math.random() * 3) + 2;
           const vy = Math.floor(Math.random() * 3) + 1;
           return {
-            enunciado: `Calcule a 1ª coordenada (linha 1 × vetor) do produto:
-| ${a}  ${b} |  ×  | ${vx} |
-| ${c}  ${d} |     | ${vy} |`,
+            enunciado: `Calcule a 1ª coordenada (linha 1 × vetor) do produto:\n| ${a}  ${b} |  ×  | ${vx} |\n| ${c}  ${d} |     | ${vy} |`,
             explicacao: `<strong>Regra de ouro:</strong> Para achar a primeira linha do resultado, multiplique cada elemento da 1ª linha da matriz pelas coordenadas do vetor e some: (${a} × ${vx}) + (${b} × ${vy}).`,
             resposta: (a * vx) + (b * vy)
           };
@@ -377,9 +541,7 @@ Cálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
           const l1 = Math.floor(Math.random() * 5) + 5;
           const l2 = Math.floor(Math.random() * 4) + 1;
           return {
-            enunciado: `Qual é o MAIOR autovalor (λ) desta matriz diagonal?
-| ${l1}   0 |
-| 0    ${l2} |`,
+            enunciado: `Qual é o MAIOR autovalor (λ) desta matriz diagonal?\n| ${l1}   0 |\n| 0    ${l2} |`,
             explicacao: `<strong>Regra de ouro:</strong> Em uma matriz diagonal, os autovalores são exatamente os números que estão na diagonal principal (${l1} e ${l2}). Basta identificar qual deles é o maior!`,
             resposta: Math.max(l1, l2)
           };
@@ -458,6 +620,40 @@ Cálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
 
     function reiniciarJogo() {
       location.reload();
+    }
+
+    // Funções da Calculadora
+    function alternarModal(abrir) {
+      const modal = document.getElementById("modal-ajuda");
+      if (abrir) {
+        modal.classList.add("ativo");
+      } else {
+        modal.classList.remove("ativo");
+      }
+    }
+
+    function calcLimpar() {
+      document.getElementById("calc-tela").value = "0";
+    }
+
+    function calcDigitar(valor) {
+      const tela = document.getElementById("calc-tela");
+      if (tela.value === "0" || tela.value === "Erro") {
+        tela.value = valor;
+      } else {
+        tela.value += valor;
+      }
+    }
+
+    function calcCalcular() {
+      const tela = document.getElementById("calc-tela");
+      try {
+        // Usa eval de forma segura apenas para expressões numéricas simples da calculadora
+        let resultado = eval(tela.value.replace(/×/g, '*').replace(/÷/g, '/'));
+        tela.value = resultado;
+      } catch (e) {
+        tela.value = "Erro";
+      }
     }
 
     document.addEventListener("keypress", function(event) {
