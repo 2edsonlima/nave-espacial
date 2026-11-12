@@ -1,671 +1,717 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Desafio Quântico: Fuga da Álgebra Linear</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚡ Matrizes Quânticas - Nave Espacial</title>
   <style>
     :root {
-      --bg-color: #070913;
-      --card-bg: #101426;
-      --border-color: #00f3ff;
-      --accent-pink: #ff007f;
-      --accent-green: #00ff88;
-      --text-main: #f8fafc;
-      --text-rules: #cbd5e1;
+      --bg-dark: #070b19;
+      --card-bg: #0f172a;
+      --neon-cyan: #00f3ff;
+      --neon-magenta: #ff007f;
+      --neon-green: #00ff88;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border-color: #1e293b;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background: radial-gradient(circle at center, #0f172a 0%, #070913 100%);
+      background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       padding: 20px;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 243, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(255, 0, 127, 0.08), transparent 25%);
     }
 
-    .game-container {
+    .container {
+      max-width: 1050px;
       width: 100%;
-      max-width: 580px;
-      background: var(--card-bg);
-      border: 1px solid rgba(0, 243, 255, 0.35);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 243, 255, 0.15);
-      padding: 30px;
-      position: relative;
-      overflow: hidden;
     }
 
-    .game-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #00f3ff, #ff007f);
-    }
-
-    .header {
+    /* Header e Barra de Progresso */
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      padding-bottom: 15px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .title-area h1 {
-      font-size: 1.15rem;
-      font-weight: 800;
+    h1 {
+      font-size: 1.8rem;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
       letter-spacing: 1px;
-      color: #00f3ff;
-      text-transform: uppercase;
-      font-family: 'Courier New', Courier, monospace;
     }
 
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .badge-fase {
-      background: rgba(255, 0, 127, 0.2);
-      color: #ff4da6;
-      border: 1px solid rgba(255, 0, 127, 0.5);
-      padding: 5px 10px;
+    .phase-badge {
+      background: rgba(0, 243, 255, 0.1);
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
+      padding: 6px 16px;
       border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .btn-ajuda {
-      background: rgba(0, 243, 255, 0.15);
-      color: #00f3ff;
-      border: 1px solid rgba(0, 243, 255, 0.4);
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-ajuda:hover {
-      background: #00f3ff;
-      color: #070913;
+      font-weight: bold;
+      font-size: 0.95rem;
     }
 
     .progress-bar-container {
       width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
-      margin-bottom: 25px;
+      height: 8px;
+      background: var(--border-color);
+      border-radius: 4px;
       overflow: hidden;
+      margin-bottom: 24px;
     }
 
     .progress-bar {
       height: 100%;
-      background: linear-gradient(90deg, #00f3ff, #00ff88);
-      width: 16.66%;
+      width: 16.6%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta));
       transition: width 0.4s ease;
     }
 
-    .question-card {
-      background: #0b0f1e;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+    /* Grid Principal */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 820px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 20px;
-      margin-bottom: 20px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
     }
 
-    .question-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 12px;
-    }
-
-    .question-statement {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #ffffff;
-      font-weight: 600;
-      font-family: 'Courier New', Courier, monospace;
-      background: #05070f;
-      padding: 16px;
-      border-radius: 8px;
-      border-left: 4px solid #00f3ff;
-      margin-bottom: 16px;
-      white-space: pre-line;
-    }
-
-    .explanation-box {
-      background: #131b31;
-      border: 1px solid rgba(0, 243, 255, 0.45);
-      border-radius: 8px;
-      padding: 14px 16px;
-      font-size: 0.95rem;
-      color: var(--text-rules);
-      line-height: 1.5;
-    }
-
-    .explanation-box strong {
-      color: #00f3ff;
-      font-weight: 700;
-    }
-
-    .input-group {
+    /* Arena da Nave */
+    .arena {
+      position: relative;
+      height: 190px;
+      background: #040711;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(#ffffff 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.2;
+    }
+
+    .lane-labels {
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      font-family: monospace;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .ship-container {
+      position: relative;
+      height: 100%;
+      width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ship {
+      position: absolute;
+      font-size: 2.2rem;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0 0 8px var(--neon-cyan));
+      z-index: 2;
+    }
+
+    .ship-ghost {
+      position: absolute;
+      font-size: 2.2rem;
+      opacity: 0;
+      transition: all 0.5s ease;
+      filter: drop-shadow(0 0 10px var(--neon-magenta));
+      z-index: 1;
+    }
+
+    .portal-zone {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      z-index: 2;
+    }
+
+    .portal {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 2px dashed var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      transition: all 0.3s;
+    }
+
+    .portal.active {
+      border-color: var(--neon-green);
+      color: var(--neon-green);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    /* Textos e Explicações */
+    .phase-title {
+      font-size: 1.3rem;
+      color: var(--neon-cyan);
+      margin-bottom: 8px;
+    }
+
+    .challenge-desc {
+      line-height: 1.5;
+      margin-bottom: 14px;
+      font-size: 1rem;
+    }
+
+    .explain-box {
+      background: rgba(0, 243, 255, 0.06);
+      border-left: 3px solid var(--neon-cyan);
+      padding: 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: #cbd5e1;
+      margin-bottom: 18px;
+    }
+
+    /* Representação Matricial */
+    .math-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      background: #090e1c;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.1rem;
+    }
+
+    .matrix-bracket {
+      display: inline-flex;
+      flex-direction: column;
+      border-left: 2px solid var(--neon-cyan);
+      border-right: 2px solid var(--neon-cyan);
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .matrix-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+    }
+
+    /* Opções / Comandos */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    button.option-btn {
+      background: #162038;
+      border: 1px solid #2d3b5e;
+      color: var(--text-main);
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    button.option-btn:hover {
+      border-color: var(--neon-cyan);
+      background: #1d2b4d;
+      transform: translateY(-2px);
+    }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+      text-align: center;
+    }
+
+    .feedback.success {
+      display: block;
+      background: rgba(0, 255, 136, 0.15);
+      border: 1px solid var(--neon-green);
+      color: var(--neon-green);
+    }
+
+    .feedback.error {
+      display: block;
+      background: rgba(255, 0, 127, 0.15);
+      border: 1px solid var(--neon-magenta);
+      color: #ff66b2;
+    }
+
+    .next-btn {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+      padding: 12px;
+      background: linear-gradient(90deg, var(--neon-cyan), #00a8ff);
+      border: none;
+      border-radius: 8px;
+      color: #040711;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* Calculadora Quântica */
+    .calc-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--neon-magenta);
+    }
+
+    .calc-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .calc-inputs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 10px;
       margin-bottom: 15px;
     }
 
-    input[type="number"] {
-      flex: 1;
-      background: #05070f;
-      border: 2px solid rgba(0, 243, 255, 0.5);
-      color: #ffffff;
-      padding: 12px 16px;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      outline: none;
-      transition: all 0.3s ease;
-      font-family: 'Courier New', Courier, monospace;
-    }
-
-    input[type="number"]:focus {
-      border-color: #00f3ff;
-      box-shadow: 0 0 12px rgba(0, 243, 255, 0.4);
-    }
-
-    button.btn-responder {
-      background: #00f3ff;
-      color: #070913;
-      border: none;
-      padding: 0 25px;
-      font-weight: 800;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    button.btn-responder:hover {
-      background: #ffffff;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 243, 255, 0.4);
-    }
-
-    .msg {
-      font-weight: 700;
-      font-size: 1rem;
-      min-height: 24px;
-      text-align: center;
-      margin-top: 10px;
-      transition: color 0.3s ease;
-    }
-
-    /* Modal de Ajuda & Calculadora */
-    .modal-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(7, 9, 19, 0.92);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .modal-overlay.ativo {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-content {
-      background: #12182d;
-      border: 1px solid #00f3ff;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 420px;
-      padding: 25px;
-      box-shadow: 0 10px 25px rgba(0, 243, 255, 0.2);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 10px;
-    }
-
-    .modal-header h3 {
-      color: #00f3ff;
-      font-size: 1.1rem;
-    }
-
-    .btn-fechar {
-      background: none;
-      border: none;
-      color: #ff4da6;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .calc-screen {
-      width: 100%;
-      background: #05070f;
-      border: 1px solid rgba(0, 243, 255, 0.4);
-      color: #fff;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 1.3rem;
-      padding: 12px;
-      text-align: right;
-      border-radius: 6px;
-      margin-bottom: 15px;
-    }
-
-    .calc-grid {
+    .calc-grid-2x2 {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(2, 52px);
+      gap: 6px;
+      border-left: 2px solid var(--neon-magenta);
+      border-right: 2px solid var(--neon-magenta);
+      padding: 6px;
+      border-radius: 4px;
     }
 
-    .calc-btn {
-      background: #1e2642;
+    .calc-grid-2x1 {
+      display: grid;
+      grid-template-columns: 52px;
+      gap: 6px;
+      border-left: 2px solid var(--neon-cyan);
+      border-right: 2px solid var(--neon-cyan);
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    input.mat-input {
+      width: 50px;
+      padding: 6px;
+      background: #070b19;
+      border: 1px solid #334155;
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 12px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .calc-btn:hover {
-      background: #00f3ff;
-      color: #070913;
-    }
-
-    .calc-btn.op {
-      background: rgba(0, 243, 255, 0.2);
-      color: #00f3ff;
-    }
-
-    .calc-btn.igual {
-      background: var(--accent-green);
-      color: #070913;
-      grid-column: span 2;
-    }
-
-    .calc-btn.limpar {
-      background: rgba(255, 0, 127, 0.2);
-      color: #ff4da6;
-    }
-
-    .victory-screen {
       text-align: center;
-      padding: 30px 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.95rem;
     }
 
-    .victory-screen h2 {
-      color: var(--accent-green);
-      font-size: 2rem;
-      margin-bottom: 15px;
+    .preset-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
     }
 
-    .victory-screen p {
-      color: var(--text-rules);
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    .btn-restart {
-      background: var(--accent-green);
-      color: #070913;
-      border: none;
-      padding: 12px 30px;
-      font-weight: bold;
-      font-size: 1rem;
-      border-radius: 8px;
+    .preset-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .btn-restart:hover {
-      background: #ffffff;
-      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+    .preset-btn:hover {
+      border-color: var(--neon-magenta);
+      color: #fff;
     }
 
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-6px); }
-      40%, 80% { transform: translateX(6px); }
+    .calc-action-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--neon-magenta);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 14px;
     }
 
-    .shake {
-      animation: shake 0.4s ease-in-out;
+    .calc-result-box {
+      background: #070b19;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      text-align: center;
+      font-family: monospace;
     }
 
-    @media (max-width: 480px) {
-      .game-container {
-        padding: 20px;
-      }
-      .input-group {
-        flex-direction: column;
-      }
-      button.btn-responder {
-        padding: 14px;
-      }
+    .prob-bar {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--neon-green);
     }
   </style>
 </head>
 <body>
-
-  <div class="game-container" id="game-box">
-    <div class="header">
-      <div class="title-area">
-        <h1>⚡ MATRIZES QUÂNTICAS</h1>
-      </div>
-      <div class="header-actions">
-        <button class="btn-ajuda" onclick="alternarModal(true)">? Calculadora</button>
-        <div class="badge-fase" id="fase-titulo">Fase 1 / 6</div>
-      </div>
-    </div>
+  <div class="container">
+    <!-- Cabeçalho -->
+    <header>
+      <h1>⚡ MATRIZES QUÂNTICAS</h1>
+      <div class="phase-badge" id="phaseBadge">Fase 1 / 6</div>
+    </header>
 
     <div class="progress-bar-container">
-      <div class="progress-bar" id="progress-bar"></div>
+      <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <div id="game-content">
-      <div class="question-card">
-        <div class="question-title" id="categoria-titulo">Multiplicação por Escalar</div>
-        <div class="question-statement" id="enunciado">Carregando desafio...</div>
-        <div class="explanation-box" id="explicacao">
+    <!-- Área Principal -->
+    <div class="main-grid">
+      <!-- Coluna do Jogo -->
+      <div class="card">
+        <!-- Simulador Visual da Nave -->
+        <div class="arena">
+          <div class="stars"></div>
+          <div class="lane-labels">
+            <span>|0⟩ Rota Norte</span>
+            <span>|1⟩ Rota Sul</span>
+          </div>
+
+          <div class="ship-container">
+            <div class="ship" id="shipMain">🚀</div>
+            <div class="ship-ghost" id="shipGhost">🚀</div>
+          </div>
+
+          <div class="portal-zone">
+            <div class="portal" id="portal0">|0⟩</div>
+            <div class="portal" id="portal1">|1⟩</div>
+          </div>
+        </div>
+
+        <!-- Enunciado da Fase -->
+        <h2 class="phase-title" id="phaseTitle">Carregando...</h2>
+        <p class="challenge-desc" id="challengeDesc">Carregando desafio...</p>
+
+        <div class="explain-box" id="explainBox">
           <strong>Como entender: </strong>Carregando explicação...
         </div>
+
+        <!-- Equação / Estado Atual -->
+        <div class="math-display" id="mathDisplay"></div>
+
+        <!-- Botões de Resposta -->
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <!-- Feedback -->
+        <div class="feedback" id="feedbackBox"></div>
+        <button class="next-btn" id="nextBtn" onclick="nextPhase()">Avançar para Próxima Fase ➔</button>
       </div>
 
-      <div class="input-group">
-        <input type="number" id="resposta" placeholder="Digite sua resposta..." autocomplete="off">
-        <button class="btn-responder" onclick="verificar()">Responder</button>
-      </div>
-
-      <div class="msg" id="mensagem"></div>
-    </div>
-
-    <!-- Modal de Ajuda & Calculadora -->
-    <div class="modal-overlay" id="modal-ajuda">
-      <div class="modal-content">
-        <div class="modal-header">
+      <!-- Coluna da Calculadora Quântica -->
+      <div class="card">
+        <div class="calc-header">
           <h3>🧮 Calculadora Quântica</h3>
-          <button class="btn-fechar" onclick="alternarModal(false)">✕</button>
         </div>
-        <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 10px;">
-          Use esta calculadora para fazer suas contas!
+        <p class="calc-subtitle">
+          Teste portas quânticas (matrizes 2×2) multiplicando o vetor de estado da nave!
+        </p>
+
+        <div class="preset-btns">
+          <button class="preset-btn" onclick="setMatrix(0, 1, 1, 0)">Porta X (NOT)</button>
+          <button class="preset-btn" onclick="setMatrix(1, 0, 0, -1)">Porta Z (Fase)</button>
+          <button class="preset-btn" onclick="setMatrix(0.707, 0.707, 0.707, -0.707)">Porta H (Hadamard)</button>
+          <button class="preset-btn" onclick="setMatrix(2, 0, 0, 2)">Escalar ×2</button>
         </div>
-        <input type="text" class="calc-screen" id="calc-tela" readonly value="0">
-        <div class="calc-grid">
-          <button class="calc-btn limpar" onclick="calcLimpar()">C</button>
-          <button class="calc-btn op" onclick="calcDigitar('(')">(</button>
-          <button class="calc-btn op" onclick="calcDigitar(')')">)</button>
-          <button class="calc-btn op" onclick="calcDigitar('/')">÷</button>
-          
-          <button class="calc-btn" onclick="calcDigitar('7')">7</button>
-          <button class="calc-btn" onclick="calcDigitar('8')">8</button>
-          <button class="calc-btn" onclick="calcDigitar('9')">9</button>
-          <button class="calc-btn op" onclick="calcDigitar('*')">×</button>
-          
-          <button class="calc-btn" onclick="calcDigitar('4')">4</button>
-          <button class="calc-btn" onclick="calcDigitar('5')">5</button>
-          <button class="calc-btn" onclick="calcDigitar('6')">6</button>
-          <button class="calc-btn op" onclick="calcDigitar('-')">-</button>
-          
-          <button class="calc-btn" onclick="calcDigitar('1')">1</button>
-          <button class="calc-btn" onclick="calcDigitar('2')">2</button>
-          <button class="calc-btn" onclick="calcDigitar('3')">3</button>
-          <button class="calc-btn op" onclick="calcDigitar('+')">+</button>
-          
-          <button class="calc-btn" onclick="calcDigitar('0')">0</button>
-          <button class="calc-btn" onclick="calcDigitar('.')">.</button>
-          <button class="calc-btn igual" onclick="calcCalcular()">=</button>
+
+        <div class="calc-inputs">
+          <div class="calc-grid-2x2">
+            <input type="number" step="any" id="m00" class="mat-input" value="0" />
+            <input type="number" step="any" id="m01" class="mat-input" value="1" />
+            <input type="number" step="any" id="m10" class="mat-input" value="1" />
+            <input type="number" step="any" id="m11" class="mat-input" value="0" />
+          </div>
+          <span>×</span>
+          <div class="calc-grid-2x1">
+            <input type="number" step="any" id="v0" class="mat-input" value="1" />
+            <input type="number" step="any" id="v1" class="mat-input" value="0" />
+          </div>
+        </div>
+
+        <button class="calc-action-btn" onclick="calculateQuantum()">Calcular Novo Estado</button>
+
+        <div class="calc-result-box" id="calcResult">
+          Resultado: [ 0 , 1 ]ᵀ
+          <div class="prob-bar">Probabilidades: P(|0⟩) = 0% | P(|1⟩) = 100%</div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const fasesData = [
+    // Banco de Fases Educativas
+    const phases = [
       {
-        nivel: "Fácil",
-        categoria: "Multiplicação por Escalar",
-        gerar: () => {
-          const k = Math.floor(Math.random() * 4) + 2;
-          const v = Math.floor(Math.random() * 6) + 3;
-          return {
-            enunciado: `Multiplique o vetor v = (${v}) pelo escalar k = ${k}.`,
-            explicacao: `<strong>Regra de ouro:</strong> Multiplicar um vetor por um número (escalar) significa multiplicar cada componente do vetor por esse número. Aqui, basta calcular: ${k} × ${v}.`,
-            resposta: k * v
-          };
-        }
+        title: "1. Multiplicação por Escalar (Propulsão)",
+        desc: "A nave está na Rota Norte |0⟩ com potência 1. Precisamos multiplicar seu vetor de estado por um escalar k = 3 para atingir a velocidade de dobra e atravessar o portal |0⟩.",
+        explain: "Na Álgebra Linear, multiplicar um vetor por um número (escalar) multiplica cada componente individualmente. Na computação quântica, ajustamos amplitudes antes de normalizar o sistema.",
+        mathHTML: `<span>3 ×</span> <div class="matrix-bracket"><div>1</div><div>0</div></div> <span>= ?</span>`,
+        shipState: "top",
+        targetPortals: [0],
+        options: [
+          { label: "Vetor [ 3 , 0 ]ᵀ", correct: true, msg: "Exato! 3 × 1 = 3 e 3 × 0 = 0. Propulsores em potência máxima na Rota Norte!" },
+          { label: "Vetor [ 0 , 3 ]ᵀ", correct: false, msg: "Ops! O zero continua na segunda linha (3 × 0 = 0)." },
+          { label: "Vetor [ 3 , 3 ]ᵀ", correct: false, msg: "Cuidado! 3 multiplicado por 0 ainda é 0." }
+        ]
       },
       {
-        nivel: "Fácil",
-        categoria: "Soma de Vetores 1D",
-        gerar: () => {
-          const a = Math.floor(Math.random() * 10) + 2;
-          const b = Math.floor(Math.random() * 10) + 2;
-          return {
-            enunciado: `Some os vetores unidimensionais:\nA = [${a}]  e  B = [${b}]`,
-            explicacao: `<strong>Regra de ouro:</strong> A soma de vetores é feita somando componente a componente. Como temos apenas uma dimensão, some diretamente: ${a} + ${b}.`,
-            resposta: a + b
-          };
-        }
+        title: "2. Porta Pauli-X (Inversão de Rota)",
+        desc: "Um asteroide bloqueou a Rota Norte |0⟩! Aplique a Porta Quântica Pauli-X (equivalente ao NOT clássico) para inverter o estado da nave para a Rota Sul |1⟩.",
+        explain: "A Porta X troca as posições de cima e de baixo do vetor qubit. Se a nave estava 100% em |0⟩, ela passa a estar 100% em |1⟩.",
+        mathHTML: `<div class="matrix-bracket"><div class="matrix-row"><span>0</span><span>1</span></div><div class="matrix-row"><span>1</span><span>0</span></div></div> <span>×</span> <div class="matrix-bracket"><div>1</div><div>0</div></div> <span>= ?</span>`,
+        shipState: "bottom",
+        targetPortals: [1],
+        options: [
+          { label: "Estado |1⟩ = [ 0 , 1 ]ᵀ", correct: true, msg: "Perfeito! A matriz Pauli-X inverteu a rota da nave com segurança para |1⟩." },
+          { label: "Estado |0⟩ = [ 1 , 0 ]ᵀ", correct: false, msg: "Esse é o estado inicial. Multiplique linha por coluna para inverter!" },
+          { label: "Estado [ 1 , 1 ]ᵀ", correct: false, msg: "A soma das multiplicações resulta em 0 na primeira linha e 1 na segunda." }
+        ]
       },
       {
-        nivel: "Médio",
-        categoria: "Determinante 2x2",
-        gerar: () => {
-          const a = Math.floor(Math.random() * 4) + 1;
-          const b = Math.floor(Math.random() * 3) + 1;
-          const c = Math.floor(Math.random() * 3) + 1;
-          const d = Math.floor(Math.random() * 4) + 2;
-          return {
-            enunciado: `Calcule o determinante da matriz 2x2:\n| ${a}   ${b} |\n| ${c}   ${d} |`,
-            explicacao: `<strong>Regra de ouro:</strong> O determinante de uma matriz 2x2 [[a, b], [c, d]] é dado por (a × d) - (b × c).\nCálculo: (${a} × ${d}) - (${b} × ${c}) = ${a * d} - ${b * c}.`,
-            resposta: (a * d) - (b * c)
-          };
-        }
+        title: "3. Porta Hadamard (Superposição Quântica)",
+        desc: "Dois portais abriram simultaneamente! Aplique a Porta Hadamard (H) no estado |0⟩ para colocar a nave em superposição e atravessar ambos ao mesmo tempo.",
+        explain: "A superposição é como uma moeda girando: a nave não está apenas em cima ou embaixo, mas nos dois caminhos ao mesmo tempo com 50% de chance cada!",
+        mathHTML: `<span>H |0⟩ = (1/√2)</span> <div class="matrix-bracket"><div class="matrix-row"><span>1</span><span>1</span></div><div class="matrix-row"><span>1</span><span>-1</span></div></div> <div class="matrix-bracket"><div>1</div><div>0</div></div>`,
+        shipState: "superposition",
+        targetPortals: [0, 1],
+        options: [
+          { label: "[ 1/√2 , 1/√2 ]ᵀ (50% / 50%)", correct: true, msg: "Incrível! A nave entrou em superposição quântica e duplicou seu rastro!" },
+          { label: "[ 1 , 0 ]ᵀ (100% Norte)", correct: false, msg: "Isso não geraria superposição. Use a calculadora ao lado com o botão Porta H!" },
+          { label: "[ 0 , 0 ]ᵀ (Sem energia)", correct: false, msg: "Um qubit nunca pode ter probabilidade zero em todos os estados." }
+        ]
       },
       {
-        nivel: "Médio",
-        categoria: "Produto Escalar (Dot Product)",
-        gerar: () => {
-          const x1 = Math.floor(Math.random() * 4) + 1;
-          const y1 = Math.floor(Math.random() * 3) + 1;
-          const x2 = Math.floor(Math.random() * 4) + 1;
-          const y2 = Math.floor(Math.random() * 3) + 1;
-          return {
-            enunciado: `Calcule o produto escalar dos vetores:\nu = (${x1}, ${y1})  e  v = (${x2}, ${y2})`,
-            explicacao: `<strong>Regra de ouro:</strong> Multiplique as coordenadas correspondentes e depois some os resultados: (x₁ × x₂) + (y₁ × y₂).\nCálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
-            resposta: (x1 * x2) + (y1 * y2)
-          };
-        }
+        title: "4. Normalização de Probabilidades",
+        desc: "Para estabilizar o escudo quântico, a soma dos quadrados das amplitudes deve ser igual a 1 (|α|² + |β|² = 1). Se α = 0.6, qual deve ser o valor de β?",
+        explain: "Na mecânica quântica, a probabilidade é o quadrado da amplitude. Como 0.6² = 0.36, falta 0.64 para completar 1 (100% de probabilidade total).",
+        mathHTML: `<span>(0.6)² + β² = 1  ⇒  0.36 + β² = 1</span>`,
+        shipState: "superposition",
+        targetPortals: [0, 1],
+        options: [
+          { label: "β = 0.8 (pois 0.8² = 0.64)", correct: true, msg: "Na mosca! 0.36 + 0.64 = 1.00 (100%). Escudo estabilizado!" },
+          { label: "β = 0.4 (pois 0.6 + 0.4 = 1)", correct: false, msg: "Quase! Lembre-se que devemos elevar os valores ao quadrado antes de somar." },
+          { label: "β = 1.0", correct: false, msg: "Isso passaria de 100% de probabilidade." }
+        ]
       },
       {
-        nivel: "Difícil",
-        categoria: "Multiplicação Matriz × Vetor",
-        gerar: () => {
-          const a = Math.floor(Math.random() * 3) + 2;
-          const b = Math.floor(Math.random() * 3) + 1;
-          const c = Math.floor(Math.random() * 3) + 1;
-          const d = Math.floor(Math.random() * 3) + 2;
-          const vx = Math.floor(Math.random() * 3) + 2;
-          const vy = Math.floor(Math.random() * 3) + 1;
-          return {
-            enunciado: `Calcule a 1ª coordenada (linha 1 × vetor) do produto:\n| ${a}  ${b} |  ×  | ${vx} |\n| ${c}  ${d} |     | ${vy} |`,
-            explicacao: `<strong>Regra de ouro:</strong> Para achar a primeira linha do resultado, multiplique cada elemento da 1ª linha da matriz pelas coordenadas do vetor e some: (${a} × ${vx}) + (${b} × ${vy}).`,
-            resposta: (a * vx) + (b * vy)
-          };
-        }
+        title: "5. Interferência com Porta Z (Fase)",
+        desc: "Sua nave está em superposição [ 1/√2 , 1/√2 ]ᵀ. Aplique a Porta Pauli-Z para inverter o sinal da componente Sul |1⟩ e desviar de um campo magnético.",
+        explain: "A Porta Z não muda a probabilidade imediata, mas muda a 'fase' (o sinal + ou -) do estado |1⟩, permitindo interferência construtiva ou destrutiva.",
+        mathHTML: `<div class="matrix-bracket"><div class="matrix-row"><span>1</span><span>0</span></div><div class="matrix-row"><span>0</span><span>-1</span></div></div> <span>×</span> <div class="matrix-bracket"><div>1/√2</div><div>1/√2</div></div>`,
+        shipState: "superposition",
+        targetPortals: [1],
+        options: [
+          { label: "[ 1/√2 , -1/√2 ]ᵀ", correct: true, msg: "Excelente! A fase foi invertida para -1/√2 na segunda linha." },
+          { label: "[ -1/√2 , 1/√2 ]ᵀ", correct: false, msg: "O sinal negativo (-1) está na segunda linha da matriz Z, não na primeira." },
+          { label: "[ 0 , 1 ]ᵀ", correct: false, msg: "A matriz Z mantém a amplitude da primeira linha e apenas inverte o sinal da segunda." }
+        ]
       },
       {
-        nivel: "Difícil",
-        categoria: "Autovalores em Matrizes Diagonais",
-        gerar: () => {
-          const l1 = Math.floor(Math.random() * 5) + 5;
-          const l2 = Math.floor(Math.random() * 4) + 1;
-          return {
-            enunciado: `Qual é o MAIOR autovalor (λ) desta matriz diagonal?\n| ${l1}   0 |\n| 0    ${l2} |`,
-            explicacao: `<strong>Regra de ouro:</strong> Em uma matriz diagonal, os autovalores são exatamente os números que estão na diagonal principal (${l1} e ${l2}). Basta identificar qual deles é o maior!`,
-            resposta: Math.max(l1, l2)
-          };
-        }
+        title: "6. Desafio Final: Reversibilidade Quântica",
+        desc: "O reator vai colapsar! Sua nave está em superposição H|0⟩. O que acontece se aplicarmos a Porta Hadamard (H) uma segunda vez consecutiva?",
+        explain: "Toda porta quântica é reversível! Aplicar Hadamard duas vezes desfaz a superposição por interferência e retorna exatamente ao estado original.",
+        mathHTML: `<span>H × (H |0⟩) = I |0⟩ = ?</span>`,
+        shipState: "top",
+        targetPortals: [0],
+        options: [
+          { label: "Volta para |0⟩ = [ 1 , 0 ]ᵀ", correct: true, msg: "MISSÃO CUMPRIDA! H·H = Identidade. Você dominou a Álgebra Linear Quântica!" },
+          { label: "Vai para |1⟩ = [ 0 , 1 ]ᵀ", correct: false, msg: "Lembre-se: H aplicado duas vezes funciona como um 'desfazer' do estado inicial |0⟩." },
+          { label: "A nave desaparece", correct: false, msg: "Na computação quântica, operações unitárias sempre preservam a informação!" }
+        ]
       }
     ];
 
-    let faseAtual = 0;
-    let questaoAtual = null;
+    let currentPhase = 0;
 
-    function carregarFase() {
-      const input = document.getElementById("resposta");
-      input.value = "";
-      document.getElementById("mensagem").innerText = "";
+    function loadPhase(index) {
+      const p = phases[index];
+      document.getElementById("phaseBadge").innerText = `Fase ${index + 1} / ${phases.length}`;
+      document.getElementById("progressBar").style.width = `${((index + 1) / phases.length) * 100}%`;
+      document.getElementById("phaseTitle").innerText = p.title;
+      document.getElementById("challengeDesc").innerText = p.desc;
+      document.getElementById("explainBox").innerHTML = `<strong>Como entender: </strong>${p.explain}`;
+      document.getElementById("mathDisplay").innerHTML = p.mathHTML;
 
-      const total = fasesData.length;
-      const faseObj = fasesData[faseAtual];
-      
-      document.getElementById("fase-titulo").innerText = `Fase ${faseAtual + 1} / ${total} [${faseObj.nivel.toUpperCase()}]`;
-      document.getElementById("categoria-titulo").innerText = `${faseAtual + 1}. ${faseObj.categoria}`;
-      
-      const progressoPercent = ((faseAtual + 1) / total) * 100;
-      document.getElementById("progress-bar").style.width = progressoPercent + "%";
+      // Atualiza visual da nave e portais
+      updateArenaVisual("neutral", p.targetPortals);
 
-      questaoAtual = faseObj.gerar();
-      document.getElementById("enunciado").innerText = questaoAtual.enunciado;
-      document.getElementById("explicacao").innerHTML = questaoAtual.explicacao;
+      // Limpa feedback
+      const fb = document.getElementById("feedbackBox");
+      fb.className = "feedback";
+      fb.innerText = "";
+      document.getElementById("nextBtn").style.display = "none";
 
-      input.focus();
+      // Renderiza botões de opção
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = "";
+      p.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.innerText = opt.label;
+        btn.onclick = () => checkAnswer(opt, p.shipState);
+        grid.appendChild(btn);
+      });
     }
 
-    function verificar() {
-      const input = document.getElementById("resposta");
-      const msg = document.getElementById("mensagem");
-      const card = document.getElementById("game-box");
-      const val = parseInt(input.value);
+    function updateArenaVisual(state, activePortals) {
+      const shipMain = document.getElementById("shipMain");
+      const shipGhost = document.getElementById("shipGhost");
+      const p0 = document.getElementById("portal0");
+      const p1 = document.getElementById("portal1");
 
-      if (isNaN(val)) {
-        msg.style.color = "#ff4da6";
-        msg.innerText = "Por favor, insira um número válido!";
-        card.classList.add("shake");
-        setTimeout(() => card.classList.remove("shake"), 400);
-        return;
+      p0.classList.toggle("active", activePortals.includes(0));
+      p1.classList.toggle("active", activePortals.includes(1));
+
+      if (state === "neutral") {
+        shipMain.style.top = "35px";
+        shipGhost.style.opacity = "0";
+      } else if (state === "top") {
+        shipMain.style.top = "28px";
+        shipGhost.style.opacity = "0";
+      } else if (state === "bottom") {
+        shipMain.style.top = "112px";
+        shipGhost.style.opacity = "0";
+      } else if (state === "superposition") {
+        shipMain.style.top = "28px";
+        shipGhost.style.top = "112px";
+        shipGhost.style.opacity = "0.75";
       }
+    }
 
-      if (val === questaoAtual.resposta) {
-        msg.style.color = "#00ff88";
-        msg.innerText = "✨ EXCELENTE! Resposta correta. Avançando...";
-        
-        setTimeout(() => {
-          faseAtual++;
-          if (faseAtual >= fasesData.length) {
-            mostrarVitoria();
-          } else {
-            carregarFase();
-          }
-        }, 1100);
+    function checkAnswer(option, targetShipState) {
+      const fb = document.getElementById("feedbackBox");
+      if (option.correct) {
+        fb.className = "feedback success";
+        fb.innerText = option.msg;
+        updateArenaVisual(targetShipState, phases[currentPhase].targetPortals);
+        if (currentPhase < phases.length - 1) {
+          document.getElementById("nextBtn").style.display = "block";
+        } else {
+          document.getElementById("nextBtn").innerText = "🔄 Jogar Novamente";
+          document.getElementById("nextBtn").style.display = "block";
+        }
       } else {
-        msg.style.color = "#ff4da6";
-        msg.innerText = "❌ Resposta incorreta. Leia a explicação acima e tente novamente!";
-        card.classList.add("shake");
-        setTimeout(() => card.classList.remove("shake"), 400);
+        fb.className = "feedback error";
+        fb.innerText = option.msg;
       }
     }
 
-    function mostrarVitoria() {
-      const gameBox = document.getElementById("game-box");
-      gameBox.innerHTML = `
-        <div class="victory-screen">
-          <h2>🎉 PARABÉNS, VOCÊ ESCAPOU!</h2>
-          <p>Você completou todos os desafios de Álgebra Linear com sucesso e dominou os conceitos fundamentais de vetores e matrizes!</p>
-          <button class="btn-restart" onclick="reiniciarJogo()">Jogar Novamente</button>
-        </div>
+    function nextPhase() {
+      if (currentPhase < phases.length - 1) {
+        currentPhase++;
+      } else {
+        currentPhase = 0;
+        document.getElementById("nextBtn").innerText = "Avançar para Próxima Fase ➔";
+      }
+      loadPhase(currentPhase);
+    }
+
+    // Funções da Calculadora Quântica
+    function setMatrix(a, b, c, d) {
+      document.getElementById("m00").value = a;
+      document.getElementById("m01").value = b;
+      document.getElementById("m10").value = c;
+      document.getElementById("m11").value = d;
+      calculateQuantum();
+    }
+
+    function calculateQuantum() {
+      const m00 = parseFloat(document.getElementById("m00").value) || 0;
+      const m01 = parseFloat(document.getElementById("m01").value) || 0;
+      const m10 = parseFloat(document.getElementById("m10").value) || 0;
+      const m11 = parseFloat(document.getElementById("m11").value) || 0;
+
+      const v0 = parseFloat(document.getElementById("v0").value) || 0;
+      const v1 = parseFloat(document.getElementById("v1").value) || 0;
+
+      const res0 = +(m00 * v0 + m01 * v1).toFixed(3);
+      const res1 = +(m10 * v0 + m11 * v1).toFixed(3);
+
+      const prob0 = Math.min(100, Math.round((res0 * res0) * 100));
+      const prob1 = Math.min(100, Math.round((res1 * res1) * 100));
+
+      document.getElementById("calcResult").innerHTML = `
+        Resultado: [ ${res0} , ${res1} ]ᵀ
+        <div class="prob-bar">Probabilidades: P(|0⟩) ≈ ${prob0}% | P(|1⟩) ≈ ${prob1}%</div>
       `;
     }
 
-    function reiniciarJogo() {
-      location.reload();
-    }
-
-    // Funções da Calculadora
-    function alternarModal(abrir) {
-      const modal = document.getElementById("modal-ajuda");
-      if (abrir) {
-        modal.classList.add("ativo");
-      } else {
-        modal.classList.remove("ativo");
-      }
-    }
-
-    function calcLimpar() {
-      document.getElementById("calc-tela").value = "0";
-    }
-
-    function calcDigitar(valor) {
-      const tela = document.getElementById("calc-tela");
-      if (tela.value === "0" || tela.value === "Erro") {
-        tela.value = valor;
-      } else {
-        tela.value += valor;
-      }
-    }
-
-    function calcCalcular() {
-      const tela = document.getElementById("calc-tela");
-      try {
-        // Usa eval de forma segura apenas para expressões numéricas simples da calculadora
-        let resultado = eval(tela.value.replace(/×/g, '*').replace(/÷/g, '/'));
-        tela.value = resultado;
-      } catch (e) {
-        tela.value = "Erro";
-      }
-    }
-
-    document.addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        const inputElem = document.getElementById("resposta");
-        if (inputElem && document.activeElement === inputElem) {
-          verificar();
-        }
-      }
-    });
-
-    carregarFase();
+    // Inicializa o jogo
+    loadPhase(0);
+    calculateQuantum();
   </script>
 </body>
 </html>
