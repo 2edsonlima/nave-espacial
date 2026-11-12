@@ -2,137 +2,475 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Desafio Quântico: Fuga da Álgebra Linear</title>
   <style>
+    :root {
+      -bg-color: #070913;
+      -card-bg: #101426;
+      -border-color: #00f3ff;
+      -accent-pink: #ff007f;
+      -accent-green: #00ff88;
+      -text-main: #e2e8f0;
+      -text-dim: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      background-color: #090a10;
-      color: #00f3ff;
-      font-family: 'Courier New', Courier, monospace;
+      background: radial-gradient(circle at center, #0f172a 0%, #070913 100%);
+      color: var(-text-main);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      padding: 20px;
     }
-    .card {
-      background: #121526;
-      border: 2px solid #00f3ff;
+
+    .game-container {
+      width: 100%;
+      max-width: 580px;
+      background: var(-card-bg);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 243, 255, 0.15);
       padding: 30px;
-      border-radius: 10px;
-      width: 450px;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+      position: relative;
+      overflow: hidden;
     }
-    input {
-      background: #05060a;
-      border: 1px solid #00f3ff;
-      color: white;
-      padding: 10px;
+
+    .game-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #00f3ff, #ff007f);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 15px;
+    }
+
+    .title-area h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #00f3ff;
+      text-transform: uppercase;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .badge-fase {
+      background: rgba(255, 0, 127, 0.15);
+      color: var(-accent-pink);
+      border: 1px solid rgba(255, 0, 127, 0.4);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+      margin-bottom: 25px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #00f3ff, #00ff88);
+      width: 16.66%;
+      transition: width 0.4s ease;
+    }
+
+    .question-card {
+      background: rgba(5, 7, 15, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .question-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .question-statement {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(-text-main);
+      font-family: 'Courier New', Courier, monospace;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 3px solid #00f3ff;
+      margin-bottom: 15px;
+      white-space: pre-line;
+    }
+
+    /* Explanation Box */
+    .explanation-box {
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px dashed rgba(0, 243, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-size: 0.9rem;
+      color: var(-text-dim);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .explanation-box strong {
+      color: #00f3ff;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    input[type="number"] {
+      flex: 1;
+      background: #05070f;
+      border: 2px solid rgba(0, 243, 255, 0.4);
+      color: #fff;
+      padding: 12px 16px;
       font-size: 1.2rem;
-      width: 80%;
-      margin: 15px 0;
-      text-align: center;
-      border-radius: 5px;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: 'Courier New', Courier, monospace;
     }
-    button {
+
+    input[type="number"]:focus {
+      border-color: #00f3ff;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    }
+
+    button.btn-responder {
       background: #00f3ff;
-      color: #000;
+      color: #070913;
       border: none;
-      padding: 10px 20px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 5px;
+      padding: 0 25px;
+      font-weight: 700;
       font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    button:hover {
+
+    button.btn-responder:hover {
       background: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 243, 255, 0.4);
     }
-    .msg { margin-top: 15px; font-weight: bold; }
+
+    .msg {
+      font-weight: 600;
+      font-size: 0.95rem;
+      min-height: 24px;
+      text-align: center;
+      margin-top: 10px;
+      transition: color 0.3s ease;
+    }
+
+    /* Victory screen */
+    .victory-screen {
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    .victory-screen h2 {
+      color: var(-accent-green);
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .victory-screen p {
+      color: var(-text-dim);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .btn-restart {
+      background: var(-accent-green);
+      color: #070913;
+      border: none;
+      padding: 12px 30px;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-restart:hover {
+      background: #fff;
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.4);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @media (max-width: 480px) {
+      .game-container {
+        padding: 20px;
+      }
+      .input-group {
+        flex-direction: column;
+      }
+      button.btn-responder {
+        padding: 14px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h2>⚡ DESAFIO QUÂNTICO ⚡</h2>
-    <p id="fase-titulo" style="color: #ff007f; margin: 10px 0;">Fase 1 / 6</p>
-    <div id="enunciado" style="margin: 20px 0; line-height: 1.5;">Carregando...</div>
-    
-    <input type="number" id="resposta" placeholder="Sua resposta...">
-    <br>
-    <button onclick="verificar()">RESPONDER</button>
-    <div class="msg" id="mensagem"></div>
+  <div class="game-container" id="game-box">
+    <div class="header">
+      <div class="title-area">
+        <h1>⚡ Desafio Quântico</h1>
+      </div>
+      <div class="badge-fase" id="fase-titulo">Fase 1 / 6</div>
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div id="game-content">
+      <div class="question-card">
+        <div class="question-title" id="categoria-titulo">Multiplicação por Escalar</div>
+        <div class="question-statement" id="enunciado">Carregando desafio...</div>
+        <div class="explanation-box" id="explicacao">
+          <strong>Como entender: </strong>Carregando explicação...
+        </div>
+      </div>
+
+      <div class="input-group">
+        <input type="number" id="resposta" placeholder="Digite sua resposta..." autocomplete="off">
+        <button class="btn-responder" onclick="verificar()">Responder</button>
+      </div>
+
+      <div class="msg" id="mensagem"></div>
+    </div>
   </div>
 
   <script>
-    let fase = 1;
-    let respostaCorreta = 0;
+    // Banco de fases estruturado com geração dinâmica de valores para evitar repetição exata
+    const fasesData = [
+      {
+        nivel: "Fácil",
+        categoria: "Multiplicação por Escalar",
+        gerar: () => {
+          const k = Math.floor(Math.random() * 4) + 2; // 2 a 5
+          const v = Math.floor(Math.random() * 6) + 3; // 3 a 8
+          return {
+            enunciado: `Multiplique o vetor v = (${v}) pelo escalar k = ${k}.`,
+            explicacao: `<strong>Regra de ouro:</strong> Multiplicar um vetor por um número (escalar) significa multiplicar cada componente do vetor por esse número. Aqui, basta calcular: ${k} × ${v}.`,
+            resposta: k * v
+          };
+        }
+      },
+      {
+        nivel: "Fácil",
+        categoria: "Soma de Vetores 1D",
+        gerar: () => {
+          const a = Math.floor(Math.random() * 10) + 2;
+          const b = Math.floor(Math.random() * 10) + 2;
+          return {
+            enunciado: `Some os vetores unidimensionais:
+A = [${a}]  e  B = [${b}]`,
+            explicacao: `<strong>Regra de ouro:</strong> A soma de vetores é feita somando componente a componente. Como temos apenas uma dimensão, some diretamente: ${a} + ${b}.`,
+            resposta: a + b
+          };
+        }
+      },
+      {
+        nivel: "Médio",
+        categoria: "Determinante 2x2",
+        gerar: () => {
+          const a = Math.floor(Math.random() * 4) + 1;
+          const b = Math.floor(Math.random() * 3) + 1;
+          const c = Math.floor(Math.random() * 3) + 1;
+          const d = Math.floor(Math.random() * 4) + 2;
+          return {
+            enunciado: `Calcule o determinante da matriz 2x2:
+| ${a}   ${b} |
+| ${c}   ${d} |`,
+            explicacao: `<strong>Regra de ouro:</strong> O determinante de uma matriz 2x2 [[a, b], [c, d]] é dado por (a × d) - (b × c).
+Cálculo: (${a} × ${d}) - (${b} × ${c}) = ${a * d} - ${b * c}.`,
+            resposta: (a * d) - (b * c)
+          };
+        }
+      },
+      {
+        nivel: "Médio",
+        categoria: "Produto Escalar (Dot Product)",
+        gerar: () => {
+          const x1 = Math.floor(Math.random() * 4) + 1;
+          const y1 = Math.floor(Math.random() * 3) + 1;
+          const x2 = Math.floor(Math.random() * 4) + 1;
+          const y2 = Math.floor(Math.random() * 3) + 1;
+          return {
+            enunciado: `Calcule o produto escalar dos vetores:
+u = (${x1}, ${y1})  e  v = (${x2}, ${y2})`,
+            explicacao: `<strong>Regra de ouro:</strong> Multiplique as coordenadas correspondentes e depois some os resultados: (x₁ × x₂) + (y₁ × y₂).
+Cálculo: (${x1} × ${x2}) + (${y1} × ${y2}).`,
+            resposta: (x1 * x2) + (y1 * y2)
+          };
+        }
+      },
+      {
+        nivel: "Difícil",
+        categoria: "Multiplicação Matriz × Vetor",
+        gerar: () => {
+          const a = 2, b = 3, c = 1, d = 4;
+          const vx = 3, vy = 2;
+          return {
+            enunciado: `Calcule a 1ª coordenada (linha 1 × vetor) do produto:
+| ${a}  ${b} |  ×  | ${vx} |
+| ${c}  ${d} |     | ${vy} |`,
+            explicacao: `<strong>Regra de ouro:</strong> Para achar a primeira linha do resultado, multiplique cada elemento da 1ª linha da matriz pelas coordenadas do vetor e some: (${a} × ${vx}) + (${b} × ${vy}).`,
+            resposta: (a * vx) + (b * vy)
+          };
+        }
+      },
+      {
+        nivel: "Difícil",
+        categoria: "Autovalores em Matrizes Diagonais",
+        gerar: () => {
+          const l1 = Math.floor(Math.random() * 5) + 5; // 5 a 9
+          const l2 = Math.floor(Math.random() * 4) + 1; // 1 a 4
+          return {
+            enunciado: `Qual é o MAIOR autovalor (λ) desta matriz diagonal?
+| ${l1}   0 |
+| 0    ${l2} |`,
+            explicacao: `<strong>Regra de ouro:</strong> Em uma matriz diagonal, os autovalores são exatamente os números que estão na diagonal principal (${l1} e ${l2}). O jogador só precisa identificar qual deles é o maior!`,
+            resposta: Math.max(l1, l2)
+          };
+        }
+      }
+    ];
+
+    let faseAtual = 0;
+    let questaoAtual = null;
 
     function carregarFase() {
-      document.getElementById("resposta").value = "";
+      const input = document.getElementById("resposta");
+      input.value = "";
       document.getElementById("mensagem").innerText = "";
+
+      // Atualiza indicador de progresso
+      const total = fasesData.length;
+      const faseObj = fasesData[faseAtual];
       
-      // FÁCIL (1 e 2)
-      if (fase === 1) {
-        document.getElementById("fase-titulo").innerText = "FASE 1 / 6 [FÁCIL]: Multiplicação por Escalar";
-        document.getElementById("enunciado").innerHTML = "Multiplique o vetor <b>v = (4)</b> pelo escalar <b>k = 3</b>.<br><small>Dica: 3 × 4</small>";
-        respostaCorreta = 12;
-      } else if (fase === 2) {
-        document.getElementById("fase-titulo").innerText = "FASE 2 / 6 [FÁCIL]: Soma de Vetores";
-        document.getElementById("enunciado").innerHTML = "Some os vetores 1D:<br><b>A = [7]</b> e <b>B = [8]</b><br><small>Dica: 7 + 8</small>";
-        respostaCorreta = 15;
+      document.getElementById("fase-titulo").innerText = `Fase ${faseAtual + 1} / ${total} [${faseObj.nivel.toUpperCase()}]`;
+      document.getElementById("categoria-titulo").innerText = `${faseAtual + 1}. ${faseObj.categoria}`;
       
-      // MÉDIO (3 e 4)
-      } else if (fase === 3) {
-        document.getElementById("fase-titulo").innerText = "FASE 3 / 6 [MÉDIO]: Determinante 2x2";
-        document.getElementById("enunciado").innerHTML = "Calcule o determinante da matriz:<br>| 2 &nbsp; 1 |<br>| 2 &nbsp; 5 |<br><small>Dica: (2 × 5) - (1 × 2)</small>";
-        respostaCorreta = 8;
-      } else if (fase === 4) {
-        document.getElementById("fase-titulo").innerText = "FASE 4 / 6 [MÉDIO]: Produto Escalar";
-        document.getElementById("enunciado").innerHTML = "Calcule o produto escalar dos vetores:<br><b>u = (3, 2)</b> e <b>v = (4, 1)</b><br><small>Dica: (3 × 4) + (2 × 1)</small>";
-        respostaCorreta = 14;
-      
-      // DIFÍCIL (5 e 6)
-      } else if (fase === 5) {
-        document.getElementById("fase-titulo").innerText = "FASE 5 / 6 [DIFÍCIL]: Matriz × Vetor";
-        document.getElementById("enunciado").innerHTML = "Calcule a 1ª coordenada (linha 1 × coluna) da multiplicação:<br>| 2 &nbsp; 3 | &nbsp; × &nbsp; | 4 |<br>| 1 &nbsp; 5 | &nbsp; &nbsp; &nbsp; &nbsp; | 2 |<br><small>Dica: (2 × 4) + (3 × 2)</small>";
-        respostaCorreta = 14;
-      } else if (fase === 6) {
-        document.getElementById("fase-titulo").innerText = "FASE 6 / 6 [DIFÍCIL]: Autovalores";
-        document.getElementById("enunciado").innerHTML = "Qual é o <b>MAIOR autovalor (λ)</b> da matriz diagonal?<br>| 7 &nbsp; 0 |<br>| 0 &nbsp; 3 |<br><small>Dica: Em matrizes diagonais, os autovalores são a própria diagonal (7 e 3).</small>";
-        respostaCorreta = 7;
-      }
+      // Atualiza barra de progresso
+      const progressoPercent = ((faseAtual + 1) / total) * 100;
+      document.getElementById("progress-bar").style.width = progressoPercent + "%";
+
+      // Gera nova instância da questão
+      questaoAtual = faseObj.gerar();
+      document.getElementById("enunciado").innerText = questaoAtual.enunciado;
+      document.getElementById("explicacao").innerHTML = questaoAtual.explicacao;
+
+      input.focus();
     }
 
     function verificar() {
-      let val = parseInt(document.getElementById("resposta").value);
-      let msg = document.getElementById("mensagem");
+      const input = document.getElementById("resposta");
+      const msg = document.getElementById("mensagem");
+      const card = document.getElementById("game-box");
+      const val = parseInt(input.value);
 
-      if (val === respostaCorreta) {
-        msg.style.color = "#00ff88";
-        msg.innerText = "CORRETO! Avançando...";
+      if (isNaN(val)) {
+        msg.style.color = "#ff007f";
+        msg.innerText = "Por favor, insira um número válido!";
+        card.classList.add("shake");
+        setTimeout(() => card.classList.remove("shake"), 400);
+        return;
+      }
+
+      if (val === questaoAtual.resposta) {
+        msg.style.color = "var(-accent-green)";
+        msg.innerText = "✨ EXCELENTE! Resposta correta. Avançando...";
+        
         setTimeout(() => {
-          fase++;
-          if (fase > 6) {
-            document.querySelector(".card").innerHTML = "<h1 style='color: #00ff88;'>🎉 VOCÊ ESCAPOU!</h1><p>Parabéns por dominar todos os níveis de Álgebra Linear!</p>";
+          faseAtual++;
+          if (faseAtual >= fasesData.length) {
+            mostrarVitoria();
           } else {
             carregarFase();
           }
-        }, 1200);
+        }, 1100);
       } else {
-        msg.style.color = "#ff007f";
-        msg.innerText = "ERRADO! Tente novamente.";
+        msg.style.color = "var(-accent-pink)";
+        msg.innerText = "❌ Resposta incorreta. Leia a explicação acima e tente novamente!";
+        card.classList.add("shake");
+        setTimeout(() => card.classList.remove("shake"), 400);
       }
     }
 
-    // Suporte para tecla ENTER
-    document.getElementById("resposta").addEventListener("keypress", function(event) {
+    function mostrarVitoria() {
+      const gameBox = document.getElementById("game-box");
+      gameBox.innerHTML = `
+        <div class="victory-screen">
+          <h2>🎉 PARABÉNS, VOCÊ ESCAPOU!</h2>
+          <p>Você completou todos os desafios de Álgebra Linear com sucesso e dominou os conceitos fundamentais de vetores e matrizes!</p>
+          <button class="btn-restart" onclick="reiniciarJogo()">Jogar Novamente</button>
+        </div>
+      `;
+    }
+
+    function reiniciarJogo() {
+      location.reload();
+    }
+
+    // Atalho com tecla Enter
+    document.addEventListener("keypress", function(event) {
       if (event.key === "Enter") {
-        verificar();
+        const inputElem = document.getElementById("resposta");
+        if (inputElem && document.activeElement === inputElem) {
+          verificar();
+        }
       }
     });
 
+    // Iniciar jogo
     carregarFase();
   </script>
-
 </body>
 </html>
